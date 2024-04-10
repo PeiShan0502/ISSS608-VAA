@@ -1,5 +1,6 @@
 ---
 title: "ISSS608-VAA"
+author: Kwok Pei Shan
 ---
 
 Welcome to my learning journey of ISSS608 Visual Analytics & Applications.
