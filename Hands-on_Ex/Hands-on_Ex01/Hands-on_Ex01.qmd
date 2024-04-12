@@ -152,9 +152,8 @@ Geometric objects are the actual marks we put on a plot. Examples include:
 
 -   *geom_density*
 
-```{=html}
 <!-- -->
-```
+
 -   A plot must have at least one geom; there is no upper limit. You can add a geom to a plot using the **+** operator.
 
 -   For complete list, please refer to [here](https://ggplot2.tidyverse.org/reference/#section-layer-geoms).
@@ -451,3 +450,101 @@ ggplot(data=exam_data,
 ## **Essential Grammatical Elements in ggplot2: Coordinates**
 
 The *Coordinates* functions map the position of objects onto the plane of the plot. There are a number of different possible coordinate systems to use, they are:
+
+-   \- \[\`coord_cartesian()\`\](https://ggplot2.tidyverse.org/reference/coord_cartesian.html): the default cartesian coordinate systems, where you specify x and y values (e.g. allows you to zoom in or out)
+
+-    \[\`coord_flip()\`\](https://ggplot2.tidyverse.org/reference/coord_flip.html): a cartesian system with the x and y flipped.
+
+-   \[\`coord_fixed()\`\](https://ggplot2.tidyverse.org/reference/coord_fixed.html): a cartesian system with a "fixed" aspect ratio (e.g. 1.78 for a "widescreen" plot).
+
+-   \[\`coord_quickmap()\`\](https://ggplot2.tidyverse.org/reference/coord_map.html): a coordinate system that approximates a good aspect ratio for maps.
+
+### **Working with Coordinate**
+
+By default, the bar chart of ggplot2 is in vertical form:
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar()
+```
+
+The code chunk below flips the vertical bar chart into horizontal bar chart by using `coord_flip()`.
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip()
+```
+
+### **Changing the y- and x-axis range**
+
+The scatter plot below is slightly misleading because the y-axis and x-axis range are not equal:
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS, y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, size=0.5)
+```
+
+The code chunk below fixed both the y-axis and x-axis range from 0-100:
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS, y=ENGLISH)) +
+  geom_point() +
+  geom_smooth(method=lm, 
+              size=0.5) +  
+  coord_cartesian(xlim=c(0,100),
+                  ylim=c(0,100))
+```
+
+## **Essential Grammatical Elements in ggplot2: themes**
+
+Themes control elements of the graph not related to the data. For example:
+
+-   background colour
+
+-   size of fonts
+
+-   gridlines
+
+-   colour of labels
+
+Built-in themes include: - `theme_gray()` (default) - `theme_bw()` - `theme_classic()`
+
+A list of themes can be found at this [link](https://ggplot2.tidyverse.org/reference/ggtheme.html). Each theme element can be conceived of as either a line (e.g. x-axis), a rectangle (e.g. graph background), or text (e.g. axis title).
+
+### **Working with theme**
+
+The code chunk below plot a horizontal bar chart using `theme_gray()`.
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_gray()
+```
+
+A horizontal bar chart plotted using `theme_classic()`.
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_classic()
+```
+
+A horizontal bar chart plotted using `theme_minimal()`.
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar() +
+  coord_flip() +
+  theme_minimal()
+```
