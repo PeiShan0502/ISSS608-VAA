@@ -36,6 +36,7 @@ pacman::p_load(tidyverse)
 ```
 
 Instead of using p_load, you can also do this:
+
 ```{r}
 #| eval: false
 library(tidyverse)
@@ -47,6 +48,7 @@ library(tidyverse)
 ## Loading Data
 
 Method 1 (preferred method):
+
 ```{r}
 realis <- read_csv("data/realis2019.csv", show_col_types = FALSE)
 
@@ -57,6 +59,7 @@ realis <- read_csv("data/realis2019.csv", show_col_types = FALSE)
 ```
 
 Method 2:
+
 ```{r}
 realis.csv <- 
   read.csv("data/realis2019.csv")
@@ -67,7 +70,9 @@ realis.csv <-
 
 ```
 
-Advantage of using R over Python is that R already has base statistical packages, e.g., can just use hist() to plot histogram once ggplot package is loaded.
+Advantage of using R over Python is that R already has base statistical packages, e.g., can just use hist() to plot histogram using the Base R package.
+
+The code chunk below uses ggplot package to plot histogram:
 
 ```{r}
 ggplot(data = realis,
