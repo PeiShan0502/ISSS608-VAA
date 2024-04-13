@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "ISSS608-VAA",
     "section": "",
-    "text": "Welcome to my learning journey of ISSS608 Visual Analytics & Applications."
+    "text": "Welcome to my learning journey of ISSS608 Visual Analytics & Applications (VAA)\nin Singapore Management University (SMU), semester AY2023-24 April term!"
   },
   {
     "objectID": "about.html",
@@ -96,5 +96,26 @@
     "title": "Hands-on Exercise 1 - A Layered Grammar of Graphics: ggplot2 methods",
     "section": "Essential Grammatical Elements in ggplot2: themes",
     "text": "Essential Grammatical Elements in ggplot2: themes\nThemes control elements of the graph not related to the data. For example:\n\nbackground colour\nsize of fonts\ngridlines\ncolour of labels\n\nBuilt-in themes include: - theme_gray() (default) - theme_bw() - theme_classic()\nA list of themes can be found at this link. Each theme element can be conceived of as either a line (e.g. x-axis), a rectangle (e.g. graph background), or text (e.g. axis title).\n\nWorking with theme\nThe code chunk below plot a horizontal bar chart using theme_gray().\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_gray()\n\n\n\n\nA horizontal bar chart plotted using theme_classic().\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_classic()\n\n\n\n\nA horizontal bar chart plotted using theme_minimal().\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip() +\n  theme_minimal()"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",
+    "title": "In-class Exercise 1",
+    "section": "",
+    "text": "Notes:\nwhat’s the difference between code block and code chunk?"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#loading-r-packages",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#loading-r-packages",
+    "title": "In-class Exercise 1",
+    "section": "Loading R packages",
+    "text": "Loading R packages\nIn the code chunk below, p_load() of pacman package is used to load tidyverse family of packages.\nNote: If it’s used only once - instead of loading the whole pacman package, we can do this instead to consume less resources:\n\npacman::p_load(tidyverse)\n\n# Advantage of using p_load:\n# you can load multiple packages in one line!\n\nInstead of using p_load, you can also do this:\n\nlibrary(tidyverse)\n#library(...)\n\n# But by doing this, have to create a new line for each package that I need to load."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#loading-data",
+    "href": "In-class_Ex/In-class_Ex01/In-class_Ex01.html#loading-data",
+    "title": "In-class Exercise 1",
+    "section": "Loading Data",
+    "text": "Loading Data\nMethod 1 (preferred method):\n\nrealis &lt;- read_csv(\"data/realis2019.csv\", show_col_types = FALSE)\n\n# read_csv is from tidyverse package\n# class(realis) is a tibblr dataframe\n# original column names will be retained.\n\nMethod 2:\n\nrealis.csv &lt;- \n  read.csv(\"data/realis2019.csv\")\n\n# read.csv is from Base R package\n# class(realis.csv) is a dataframe.\n# column names will be affected (e.g. spaces will be replaced with dots)\n\nAdvantage of using R over Python is that R already has base statistical packages, e.g., can just use hist() to plot histogram once ggplot package is loaded.\n\nggplot(data = realis,\n       aes(x = `Unit Price ($ psm)`)) +\n  geom_histogram()"
   }
 ]

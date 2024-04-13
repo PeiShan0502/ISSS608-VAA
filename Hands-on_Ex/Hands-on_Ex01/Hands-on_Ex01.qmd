@@ -1,5 +1,6 @@
 ---
 title: "Hands-on Exercise 1 - A Layered Grammar of Graphics: ggplot2 methods"
+author: "Kwok Pei Shan"
 ---
 
 ## Learning Outcome
@@ -453,7 +454,7 @@ The *Coordinates* functions map the position of objects onto the plane of the pl
 
 -   \- \[\`coord_cartesian()\`\](https://ggplot2.tidyverse.org/reference/coord_cartesian.html): the default cartesian coordinate systems, where you specify x and y values (e.g. allows you to zoom in or out)
 
--    \[\`coord_flip()\`\](https://ggplot2.tidyverse.org/reference/coord_flip.html): a cartesian system with the x and y flipped.
+-   \[\`coord_flip()\`\](https://ggplot2.tidyverse.org/reference/coord_flip.html): a cartesian system with the x and y flipped.
 
 -   \[\`coord_fixed()\`\](https://ggplot2.tidyverse.org/reference/coord_fixed.html): a cartesian system with a "fixed" aspect ratio (e.g. 1.78 for a "widescreen" plot).
 

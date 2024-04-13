@@ -1,0 +1,76 @@
+---
+title: "In-class Exercise 1"
+author: "Kwok Pei Shan"
+date: "April 13, 2024"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+[Notes:]{.underline}
+
+-   eval: true --\> code chunks will be run
+
+-   echo: true --\> code chunks will show in webpage
+
+-   warning: false --\> will not show warning message
+
+-   freeze: true --\> will not render if there is no change to qmd file
+
+what's the difference between code block and code chunk?
+
+## Loading R packages
+
+In the code chunk below, [`p_load()`](https://www.rdocumentation.org/packages/pacman/versions/0.5.1/topics/p_load) of [pacman](http://trinker.github.io/pacman_dev/) package is used to load tidyverse family of packages.
+
+Note: If it's used only once - instead of loading the whole pacman package, we can do this instead to consume less resources:
+
+```{r}
+pacman::p_load(tidyverse)
+
+# Advantage of using p_load:
+# you can load multiple packages in one line!
+```
+
+Instead of using p_load, you can also do this:
+```{r}
+#| eval: false
+library(tidyverse)
+#library(...)
+
+# But by doing this, have to create a new line for each package that I need to load.
+```
+
+## Loading Data
+
+Method 1 (preferred method):
+```{r}
+realis <- read_csv("data/realis2019.csv", show_col_types = FALSE)
+
+# read_csv is from tidyverse package
+# class(realis) is a tibblr dataframe
+# original column names will be retained.
+
+```
+
+Method 2:
+```{r}
+realis.csv <- 
+  read.csv("data/realis2019.csv")
+
+# read.csv is from Base R package
+# class(realis.csv) is a dataframe.
+# column names will be affected (e.g. spaces will be replaced with dots)
+
+```
+
+Advantage of using R over Python is that R already has base statistical packages, e.g., can just use hist() to plot histogram once ggplot package is loaded.
+
+```{r}
+ggplot(data = realis,
+       aes(x = `Unit Price ($ psm)`)) +
+  geom_histogram()
+```
