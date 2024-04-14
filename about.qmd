@@ -2,8 +2,6 @@
 title: "About"
 ---
 
-About this site
+Hello! I'm Kwok Pei Shan, studying at the Singapore Management University (SMU) Master of IT in Business (MITB) programme. This site is created using Quarto and published on Netlify, for the course ISSS608 Visual Analytics & Applications which is taught by Dr. Kam Tin Seong :)
 
-```{r}
-1 + 1
-```
+I hope you enjoy your time here haha :)
