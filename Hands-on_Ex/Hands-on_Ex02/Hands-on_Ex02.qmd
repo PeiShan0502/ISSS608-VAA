@@ -150,7 +150,7 @@ ggplot(data=exam_data,
 
 It also provides some extra geoms and scales for ‘ggplot2’. Consult [this vignette](https://mran.microsoft.com/snapshot/2016-12-28/web/packages/ggthemes/vignettes/ggthemes.html) to learn more.
 
-### **Working with hrbthems package**
+### **Working with hrbthemes package**
 
 [**hrbrthemes**](https://cinc.rud.is/web/packages/hrbrthemes/) package provides a base theme that focuses on typographic elements, including [where various labels are placed]{.underline} and the [fonts that are used]{.underline}.
 
