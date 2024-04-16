@@ -60,7 +60,11 @@ exam_data <- read_csv('data/Exam_data.csv', show_col_types = FALSE)
 
 One of the challenge in plotting statistical graph is annotation, especially with large number of data points.
 
-<p style="color:red;"> Note to self: find out how to do panel tabset here</p>
+<p style="color:red;">
+
+Note to self: find out how to do panel tabset here
+
+</p>
 
 ```{r}
 ggplot(data=exam_data,
@@ -238,11 +242,19 @@ p3 <- ggplot(data=exam_data,
 p3
 ```
 
-### **Creating Composite Graphics: pathwork methods** 
+### **Creating Composite Graphics: pathwork methods**
 
 There are several ggplot2 extension functions that support the needs to prepare composite figure by combining several graphs such as [`grid.arrange()`](https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html) of **gridExtra** package and [`plot_grid()`](https://wilkelab.org/cowplot/reference/plot_grid.html) of [**cowplot**](https://wilkelab.org/cowplot/) package.
 
-In this section, we are going to use a ggplot2 extension called [**patchwork**](https://patchwork.data-imaginist.com/) which is <p style="color:red;"> specially designed for combining separate ggplot2 graphs into a single figure</p>.
+In this section, we are going to use a ggplot2 extension called [**patchwork**](https://patchwork.data-imaginist.com/) which is
+
+<p style="color:red;">
+
+specially designed for combining separate ggplot2 graphs into a single figure
+
+</p>
+
+.
 
 Patchwork package has a very simple syntax where we can create layouts super easily. Here’s the general syntax that combines:
 
@@ -318,4 +330,18 @@ patchwork <- (p1 / p2) | p3
 patchwork & theme_economist()
 ```
 
-<p style="color:red;">Note: how to adjust the axis title size and axis label size, so that the plots appear nicely...?</p>
+<p style="color:red;"> Note: how to adjust the axis title size and axis label size, so that the plots appear nicely...?</p>
+
+Trying callout tip:
+
+```{::: {.callout-tip}
+## Tip with Title
+
+This is an example of a callout with a title.
+:::
+```
+
+```{::: {.callout-tip title="Tip with Title"}
+This is a callout with a title.
+:::
+```

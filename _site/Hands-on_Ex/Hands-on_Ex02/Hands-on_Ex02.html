@@ -236,7 +236,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">April 14, 2024</p>
+      <p class="date-modified">April 16, 2024</p>
     </div>
   </div>
     
@@ -288,8 +288,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="beyond-ggplot2-annotation-ggrepel"><strong>Beyond ggplot2 Annotation: ggrepel</strong></h2>
 <p>One of the challenge in plotting statistical graph is annotation, especially with large number of data points.</p>
 <p style="color:red;">
-Note to self: find out how to do panel tabset here
-</p>
+</p><p>Note to self: find out how to do panel tabset here</p>
+<p></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data,</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>MATHS, <span class="at">y=</span>ENGLISH)) <span class="sc">+</span></span>
@@ -477,10 +477,10 @@ Note to self: find out how to do panel tabset here
 <section id="creating-composite-graphics-pathwork-methods" class="level3">
 <h3 class="anchored" data-anchor-id="creating-composite-graphics-pathwork-methods"><strong>Creating Composite Graphics: pathwork methods</strong></h3>
 <p>There are several ggplot2 extension functions that support the needs to prepare composite figure by combining several graphs such as <a href="https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html"><code>grid.arrange()</code></a> of <strong>gridExtra</strong> package and <a href="https://wilkelab.org/cowplot/reference/plot_grid.html"><code>plot_grid()</code></a> of <a href="https://wilkelab.org/cowplot/"><strong>cowplot</strong></a> package.</p>
-In this section, we are going to use a ggplot2 extension called <a href="https://patchwork.data-imaginist.com/"><strong>patchwork</strong></a> which is
+<p>In this section, we are going to use a ggplot2 extension called <a href="https://patchwork.data-imaginist.com/"><strong>patchwork</strong></a> which is</p>
 <p style="color:red;">
-specially designed for combining separate ggplot2 graphs into a single figure
-</p>
+</p><p>specially designed for combining separate ggplot2 graphs into a single figure</p>
+<p></p>
 <p>.</p>
 <p>Patchwork package has a very simple syntax where we can create layouts super easily. Here’s the general syntax that combines:</p>
 <ul>
@@ -568,6 +568,13 @@ specially designed for combining separate ggplot2 graphs into a single figure
 <p style="color:red;">
 Note: how to adjust the axis title size and axis label size, so that the plots appear nicely…?
 </p>
+<p>Trying callout tip:</p>
+<p>```{::: {.callout-tip} ## Tip with Title</p>
+<p>This is an example of a callout with a title. :::</p>
+<pre><code>
+```{::: {.callout-tip title="Tip with Title"}
+This is a callout with a title.
+:::</code></pre>
 
 
 </section>
