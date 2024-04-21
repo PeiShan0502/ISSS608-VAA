@@ -1,0 +1,88 @@
+---
+title: "Take-home Exercise 1"
+author: "Kwok Pei Shan"
+date: "April 16, 2024"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## **Context**
+
+There are two major residential property market in Singapore, namely public and private housing. Public housing aims to meet the basic need of the general public with monthly household income less than or equal to S\$14,000. For families with monthly household income more than S\$14,000, they need to turn to the private residential market.
+
+In this exercise, we will prepare 2-3 data visualisations to reveal the private residential market and sub-markets of Singapore for the 1st quarter of 2024.
+
+## **Getting Started**
+
+### **Install and load required libraries**
+
+In this exercise, the following R packages will be used:
+
+-   [**tidyverse**](https://www.tidyverse.org/): an R package that assists with data import, data preparation and wrangling.
+
+-   [**ggrepel**](https://ggrepel.slowkow.com/): an R package provides geoms for ggplot2 to repel overlapping text labels.
+
+-   [**ggthemes**](https://cran.r-project.org/web/packages/ggthemes/): an R package provides some extra themes, geoms, and scales for ‘ggplot2’.
+
+-   [**hrbrthemes**](https://cinc.rud.is/web/packages/hrbrthemes/): an R package provides typography-centric themes and theme components for ggplot2.
+
+-   [**patchwork**](https://patchwork.data-imaginist.com/): an R package for preparing composite figure created using ggplot2.
+
+The code chunk below will be used to check if these packages have been installed and also load them onto the working R environment:
+
+```{r}
+pacman::p_load(tidyverse, ggrepel, ggthemes, hrbrthemes, patchwork)
+```
+
+### **Importing Data**
+
+As we are looking at the 1st quarter of 2024, we import the transaction data for 1 January 2024 to 31 March 2024, using [*read_csv()*](https://readr.tidyverse.org/reference/read_delim.html) of [**readr**](https://readr.tidyverse.org/) package. **readr** is one of the packages within the tidyverse package.
+
+```{r}
+residential <- read_csv('data/ResidentialTransaction20240414220633.csv', show_col_types = FALSE)
+```
+
+### **Data Preparation**
+
+Glimpse of data
+
+```{r}
+glimpse(residential)
+```
+
+#### Check for duplicates
+
+```{r}
+unique(residential)
+
+#all rows are unique. no duplicates.
+```
+
+#### Variable Selection
+
+#### Check data structure
+
+```{r}
+str(residential)
+#no issues
+```
+
+#### 
+
+#### Check for missing data
+
+## **Data Visualisations**
+
+### **1. Within private purchases, count no. of property (frequency on y-axis) and transaction price (x-axis) –\> Histogram. overlap with HDB purchases.**
+
+KIV ideas
+
+**1. Average Transacted Price and Purchaser Address Indicator (HDB/Private/N.A.) use bar chart- KIV**
+
+**2. Within private purchases, compare transacted prices by property type - KIV**
+
+### 
