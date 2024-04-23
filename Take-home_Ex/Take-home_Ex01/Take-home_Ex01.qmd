@@ -38,51 +38,204 @@ The code chunk below will be used to check if these packages have been installed
 pacman::p_load(tidyverse, ggrepel, ggthemes, hrbrthemes, patchwork)
 ```
 
-### **Importing Data**
+### **Import Data**
 
 As we are looking at the 1st quarter of 2024, we import the transaction data for 1 January 2024 to 31 March 2024, using [*read_csv()*](https://readr.tidyverse.org/reference/read_delim.html) of [**readr**](https://readr.tidyverse.org/) package. **readr** is one of the packages within the tidyverse package.
 
 ```{r}
-residential <- read_csv('data/ResidentialTransaction20240414220633.csv', show_col_types = FALSE)
+residential2024Q1 <- read_csv('data/ResidentialTransaction20240414220633.csv', show_col_types = FALSE)
+```
+
+We also import the transaction data in 2023, to compare with the 1st quarter of 2024:
+
+```{r}
+residential2023Q1 <- read_csv('data/ResidentialTransaction20240308160536.csv', show_col_types = FALSE)
+residential2023Q2 <- read_csv('data/ResidentialTransaction20240308160736.csv', show_col_types = FALSE)
+residential2023Q3 <- read_csv('data/ResidentialTransaction20240308161009.csv', show_col_types = FALSE)
+residential2023Q4 <- read_csv('data/ResidentialTransaction20240308161109.csv', show_col_types = FALSE)
+
+```
+
+```{r}
+residential2023 <- rbind(residential2023Q1, residential2023Q2, residential2023Q3, residential2023Q4)
 ```
 
 ### **Data Preparation**
 
-Glimpse of data
+#### Check data type
+
+A glimpse into the transaction data in 2024 shows that there are 4,902 rows and 21 columns. And the variables are all in the correct data type:
 
 ```{r}
-glimpse(residential)
+glimpse(residential2024Q1)
+```
+
+```{r}
+#Alternative method to check data type of each variable
+str(residential2024Q1)
+```
+
+Similarly, a glimpse into the transaction data in 2023 shows that there are 21,904 rows and 21 columns. And the variables are all in the correct data type:
+
+```{r}
+glimpse(residential2023)
+```
+
+```{r}
+#Alternative method to check data type of each variable
+str(residential2023)
 ```
 
 #### Check for duplicates
 
-```{r}
-unique(residential)
-
-#all rows are unique. no duplicates.
-```
-
-#### Variable Selection
-
-#### Check data structure
+The code chunk below shows that there are 4,902 unique rows in the 2024 transaction data. In other words, all the rows are unique, and there are no duplicates:
 
 ```{r}
-str(residential)
-#no issues
+unique(residential2024Q1)
+
 ```
 
-#### 
+Similarly, there are no duplicates in the 2023 transaction data:
 
-#### Check for missing data
+```{r}
+unique(residential2023)
+```
 
-## **Data Visualisations**
+#### Check for missing values
 
-### **1. Within private purchases, count no. of property (frequency on y-axis) and transaction price (x-axis) –\> Histogram. overlap with HDB purchases.**
+The `colSums()` function in the **base** package is used to check for missing values. The output of the code chunk below shows there are no missing values in the 2024 transaction data.
 
-KIV ideas
+```{r}
+colSums(is.na(residential2024Q1))
+```
 
-**1. Average Transacted Price and Purchaser Address Indicator (HDB/Private/N.A.) use bar chart- KIV**
+However, there are 6 missing values in the Area (SQM) column in the 2023 transaction data. As this makes up only 0.0274% of the 2023 transaction data, we will remove them from the subsequent analysis. The `na.omit()` function in the **stats** package is used to remove them from `residential2023`, which now has 21,898 observations and 21 variables. A confirmatory check is then made with the `colSums()` function in the **base** package.
 
-**2. Within private purchases, compare transacted prices by property type - KIV**
+```{r}
+colSums(is.na(residential2023))
+```
 
-### 
+```{r}
+residential2023 = residential2023 %>%
+  na.omit()
+```
+
+```{r}
+colSums(is.na(residential2023))
+```
+
+```{r}
+glimpse(residential2023)
+```
+
+## **Data Visualizations**
+
+#### Compare Transacted Price by Type of Sale
+
+1.  Comparing Transacted Price by Type of Sale, in [2024 Q1]{.underline}
+
+```{r}
+ggplot(data=residential2024Q1, 
+       aes(y = `Transacted Price ($)`,       
+           x= `Type of Sale`)) +    
+    scale_y_continuous(labels = scales::comma) +
+  geom_boxplot()            
+```
+
+The above chart does not look very useful as the box plots look very squished due to a large range in transacted price.
+
+We remove two outliers, where Transacted price is at \$39.5mil and \$26.5mil:
+
+```{r}
+residential2024Q1_no_outlier <- 
+  residential2024Q1[residential2024Q1$`Transacted Price ($)` < 26500000,]
+```
+
+and plot the box plots again:
+
+```{r}
+p1 <- ggplot(data=residential2024Q1_no_outlier, 
+       aes(y = `Transacted Price ($)`,       
+           x= `Type of Sale`)) +    
+    scale_y_continuous(labels = scales::comma) +
+  geom_boxplot() +
+  ggtitle("Transacted Prices in 2024 Q1")
+
+p1
+```
+
+The above data visualisation shows that in 2024 Q1, the median transacted price for resale is slightly lower than that of new sale. This is surprising considering that resale is usually deemed to be more expensive. However, the range of prices for resale is also larger as compared to new sale or sub sale, as shown by its larger interquartile range (IQR).
+
+We repeat the same steps for 2023 Q1 transaction data, to see if there is any difference with 2024 Q1:
+
+2.  Comparing Transacted Price by Type of Sale, in [2023 Q1]{.underline}
+
+```{r}
+ggplot(data=residential2023Q1, 
+       aes(y = `Transacted Price ($)`,       
+           x= `Type of Sale`)) +    
+    scale_y_continuous(labels = scales::comma) +
+  geom_boxplot()  
+```
+
+Removing the outlier (where Transacted Price \> \$30mil) and plotting the box plots again:
+
+```{r}
+residential2023Q1_no_outlier <- 
+  residential2023Q1[residential2023Q1$`Transacted Price ($)` < 30000000,]
+```
+
+```{r}
+p2 <- ggplot(data=residential2023Q1_no_outlier, 
+       aes(y = `Transacted Price ($)`,       
+           x= `Type of Sale`)) +    
+    scale_y_continuous(labels = scales::comma) +
+  geom_boxplot() +
+  ggtitle("Transacted Prices in 2023 Q1")
+
+p2
+```
+
+Similar to 2024 Q1, the above chart shows that the median transacted price is lower for resale (as compared to new sale). However, the range of transacted prices of resale and new sale are similar, and the range of transacted prices for sub sale is much smaller this time.
+
+It would be useful to compare these plots side-by-side for comparison of the same quarter in different years. We can use the patchwork package to do so:
+
+```{r}
+p1 | p2
+```
+
+Potential improvements to the above composite plot:
+
+-   Synchronise the Type of Sale axis for both 2024 Q1 and 2023 Q1
+
+-   Synchronise the Transacted Price (\$) axis for both 2024 Q1 and 2023 Q1
+
+#### Compare No. of Sales by Quarter
+
+2.  Compare Transacted Price by Year?
+
+```{r}
+hist(residential2024$TransactedPrice)
+```
+
+```{r}
+ggplot(data = residential2024,
+       aes(x=TransactedPrice)) +
+  geom_histogram(boundary = 100,
+                 color='grey25',
+                 fill='grey90') +
+  theme_gray() +
+  scale_x_continuous(labels = scales::comma) +
+  ggtitle("Distribution of Transacted Price in 2024")
+```
+
+```{r}
+ggplot(data = residential2023,
+       aes(x=TransactedPrice)) +
+  geom_histogram(bins=20,
+                 boundary = 100,
+                 color='grey25',
+                 fill='grey90') +
+  theme_gray() +
+  ggtitle("Distribution of Transacted Price in 2023")
+```
