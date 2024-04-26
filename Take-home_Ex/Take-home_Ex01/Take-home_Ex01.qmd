@@ -2,7 +2,7 @@
 title: "Take-home Exercise 1"
 author: "Kwok Pei Shan"
 date: "April 16, 2024"
-date-modified: "last-modified"
+date-modified: "April 26, 2024"
 execute: 
   eval: true
   echo: true
@@ -12,7 +12,7 @@ execute:
 
 ## **Context**
 
-There are two major residential property market in Singapore, namely public and private housing. Public housing aims to meet the basic need of the general public with monthly household income less than or equal to S\$14,000. For families with monthly household income more than S\$14,000, they need to turn to the private residential market.
+There are two major residential property markets in Singapore, namely public and private housing. Public housing aims to meet the basic need of the general public with monthly household income less than or equal to S\$14,000. For families with monthly household income more than S\$14,000, they need to turn to the private residential market.
 
 In this exercise, we will prepare 2-3 data visualisations to reveal the private residential market and sub-markets of Singapore for the 1st quarter of 2024.
 
@@ -56,52 +56,48 @@ residential2023Q4 <- read_csv('data/ResidentialTransaction20240308161109.csv', s
 
 ```
 
+## **Data Preparation**
+
+### Add "Quarter" column
+
+For our analysis in the later part of this exercise, we need to add new columns "Year" and "Quarter" to indicate which quarter of the year each transaction took place in.
+
+For 2024 Q1 data:
+
+```{r}
+residential2024Q1 <- cbind(residential2024Q1, Quarter = 'Q1')
+```
+
+For each quarter of 2023 data:
+
+```{r}
+residential2023Q1 <- cbind(residential2023Q1, Quarter = 'Q1')
+residential2023Q2 <- cbind(residential2023Q2, Quarter = 'Q2')
+residential2023Q3 <- cbind(residential2023Q3, Quarter = 'Q3')
+residential2023Q4 <- cbind(residential2023Q4, Quarter = 'Q4')
+```
+
+Combine all 4 quarters of 2023, to get a dataset with all transactions in 2023:
+
 ```{r}
 residential2023 <- rbind(residential2023Q1, residential2023Q2, residential2023Q3, residential2023Q4)
 ```
 
-### **Data Preparation**
+### Check for duplicates
 
-#### Check data type
-
-A glimpse into the transaction data in 2024 shows that there are 4,902 rows and 21 columns. And the variables are all in the correct data type:
+The code chunk below shows that there are no duplicates in the 2024 Q1 transaction data:
 
 ```{r}
-glimpse(residential2024Q1)
-```
-
-```{r}
-#Alternative method to check data type of each variable
-str(residential2024Q1)
-```
-
-Similarly, a glimpse into the transaction data in 2023 shows that there are 21,904 rows and 21 columns. And the variables are all in the correct data type:
-
-```{r}
-glimpse(residential2023)
-```
-
-```{r}
-#Alternative method to check data type of each variable
-str(residential2023)
-```
-
-#### Check for duplicates
-
-The code chunk below shows that there are 4,902 unique rows in the 2024 transaction data. In other words, all the rows are unique, and there are no duplicates:
-
-```{r}
-unique(residential2024Q1)
-
+residential2024Q1[duplicated(residential2024Q1),]
 ```
 
 Similarly, there are no duplicates in the 2023 transaction data:
 
 ```{r}
-unique(residential2023)
+residential2023[duplicated(residential2023),]
 ```
 
-#### Check for missing values
+### Check for missing values
 
 The `colSums()` function in the **base** package is used to check for missing values. The output of the code chunk below shows there are no missing values in the 2024 transaction data.
 
@@ -125,12 +121,84 @@ colSums(is.na(residential2023))
 ```
 
 ```{r}
+# check that missing values have been removed.
 glimpse(residential2023)
 ```
 
+### Check data type
+
+A glimpse into the transaction data in 2024 shows that the Sale Date column is currently in the character data type instead of the Date data type:
+
+```{r}
+glimpse(residential2024Q1)
+```
+
+We convert it into Date data type using the following code:
+
+```{r}
+residential2024Q1$`Sale Date` <- 
+  as.Date(parse_date_time(residential2024Q1$`Sale Date`, orders = c("%d %b %Y")))
+```
+
+```{r}
+#Alternative method to check data type of each variable
+str(residential2024Q1)
+```
+
+Similarly, we convert the data type of "Sale Date" in `residential2023` from character data type to Date data type:
+
+```{r}
+residential2023$`Sale Date` <- 
+  as.Date(parse_date_time(residential2023$`Sale Date`, orders = c("%d %b %Y")))
+```
+
+```{r}
+residential2023Q1$`Sale Date` <- 
+  as.Date(parse_date_time(residential2023Q1$`Sale Date`, orders = c("%d %b %Y")))
+
+residential2023Q2$`Sale Date` <- 
+  as.Date(parse_date_time(residential2023Q2$`Sale Date`, orders = c("%d %b %Y")))
+
+residential2023Q3$`Sale Date` <- 
+  as.Date(parse_date_time(residential2023Q3$`Sale Date`, orders = c("%d %b %Y")))
+
+residential2023Q4$`Sale Date` <- 
+  as.Date(parse_date_time(residential2023Q4$`Sale Date`, orders = c("%d %b %Y")))
+```
+
+### Add "Year" column
+
+For our analysis in the later part of this exercise, we also add a new column "Year" to indicate which year each transaction took place in.
+
+```{r}
+residential2024Q1 <- cbind(residential2024Q1, 
+                           Year = as.character(year(residential2024Q1$`Sale Date`)))
+```
+
+```{r}
+residential2023 <- cbind(residential2023, 
+                           Year = as.character(year(residential2023$`Sale Date`)))
+```
+
+```{r}
+residential2023Q1 <- cbind(residential2023Q1, 
+                           Year = as.character(year(residential2023Q1$`Sale Date`)))
+
+residential2023Q2 <- cbind(residential2023Q2, 
+                           Year = as.character(year(residential2023Q2$`Sale Date`)))
+
+residential2023Q3 <- cbind(residential2023Q3, 
+                           Year = as.character(year(residential2023Q3$`Sale Date`)))
+
+residential2023Q4 <- cbind(residential2023Q4, 
+                           Year = as.character(year(residential2023Q4$`Sale Date`)))
+```
+
+#### 
+
 ## **Data Visualizations**
 
-#### Compare Transacted Price by Type of Sale
+### Compare Transacted Price by Type of Sale
 
 1.  Comparing Transacted Price by Type of Sale, in [2024 Q1]{.underline}
 
@@ -196,7 +264,7 @@ p2 <- ggplot(data=residential2023Q1_no_outlier,
 p2
 ```
 
-Similar to 2024 Q1, the above chart shows that the median transacted price is lower for resale (as compared to new sale). However, the range of transacted prices of resale and new sale are similar, and the range of transacted prices for sub sale is much smaller this time.
+Similar to 2024 Q1, the above chart shows that the median transacted price is lower for resale (as compared to new sale). However, the interquartile range of transacted prices of resale and new sale are similar, and the interquartile range of transacted prices for sub sale is much smaller this time.
 
 It would be useful to compare these plots side-by-side for comparison of the same quarter in different years. We can use the patchwork package to do so:
 
@@ -208,34 +276,95 @@ Potential improvements to the above composite plot:
 
 -   Synchronise the Type of Sale axis for both 2024 Q1 and 2023 Q1
 
--   Synchronise the Transacted Price (\$) axis for both 2024 Q1 and 2023 Q1
+-   Synchronise the Transacted Price (\$) axis for both 2024 Q1 and 2023 Q1, for better comparison between the two plots.
 
-#### Compare No. of Sales by Quarter
+### Compare No. of Sales by Quarter
 
-2.  Compare Transacted Price by Year?
+We would like to see whether there is any difference in the number of transactions in each quarter. We can visualise this using a bar chart.
 
 ```{r}
-hist(residential2024$TransactedPrice)
+p3 <- ggplot(data=residential2023, 
+       aes(x=Quarter)) +
+  geom_bar() +
+  ggtitle('No. of Transactions in each Quarter (2023)') +
+  labs(y = 'No. of Transactions')
+
+p3
+```
+
+The above bar chart shows that in 2023, there were more transactions taking place in **Q2 and Q3 (i.e., April to September)**, compared to Q1 (January to March) and Q4 (October to December). A possible reason why there are fewer transactions in Q1 may be because of the Chinese New Year celebrations in Singapore, and a possible reason why there are fewer transactions in Q4 may be because it's during the school holidays where families tend to go for overseas vacations instead of buying property.
+
+We also compare 2023 Q1 sale with 2024 Q1 sale:
+
+```{r}
+residentialQ1 <- rbind(residential2023Q1, residential2024Q1)
 ```
 
 ```{r}
-ggplot(data = residential2024,
-       aes(x=TransactedPrice)) +
-  geom_histogram(boundary = 100,
-                 color='grey25',
-                 fill='grey90') +
-  theme_gray() +
-  scale_x_continuous(labels = scales::comma) +
-  ggtitle("Distribution of Transacted Price in 2024")
+p4 <- ggplot(data=residentialQ1, 
+       aes(x=Year)) +
+  geom_bar() +
+  ggtitle('Comparing Q1 Sales') +
+  labs(y = 'No. of Transactions')
+
+p4
+```
+
+The above plot shows that the number of transactions in 2024 Q1 is almost the same than the number of transactions in 2023 Q1 (only slightly higher).
+
+We put both bar charts together in a composite plot:
+
+```{r}
+p3 + p4
+```
+
+### Compare Transacted Price By Property Type
+
+First, we combine all the data into one combined dataset:
+
+```{r}
+residential <- rbind(residential2023Q1, residential2023Q2, residential2023Q3, residential2023Q4, residential2024Q1)
+```
+
+Then we plot a box plot of transacted prices by property type:
+
+```{r}
+ggplot(data=residential, 
+       aes(y = `Transacted Price ($)`,       
+           x= `Property Type`)) +    
+    scale_y_continuous(labels = scales::comma) +
+  geom_boxplot() +
+  ggtitle("Transacted Prices by Property Type")
+```
+
+Removing data points which Transacted Price \> 100million, so that we can see the box plots better:
+
+```{r}
+residential_no_outlier <- 
+  residential[residential$`Transacted Price ($)` < 100000000,]
 ```
 
 ```{r}
-ggplot(data = residential2023,
-       aes(x=TransactedPrice)) +
-  geom_histogram(bins=20,
-                 boundary = 100,
-                 color='grey25',
-                 fill='grey90') +
-  theme_gray() +
-  ggtitle("Distribution of Transacted Price in 2023")
+ggplot(data=residential_no_outlier, 
+       aes(y = `Transacted Price ($)`,       
+           x= `Property Type`)) +    
+    scale_y_continuous(labels = scales::comma) +
+  geom_boxplot() +
+  ggtitle("Transacted Prices by Property Type (< $100mil)")
 ```
+
+The above box plot shows that the property type with the highest median price is **Detached House**. It also has the largest interquartile range.
+
+## **Summary and Conclusion**
+
+1.  The median price for resale property is surprisingly, lower than that of new sale. However, the prices of resale property also have higher variability.
+
+2.  There are more sales in Q2 and Q3, as compared to Q1 or Q4.
+
+3.  The property type with the highest median price is Detached House.
+
+## **Key References**
+
+[R for Visual Analytics](https://r4va.netlify.app/)
+
+[URA Data Dictionary](https://www.ura.gov.sg/reis/dataDictionary#:~:text=Purchaser%20Address%20Indicator%3A%20It%20refers,is%20owned%20by%20the%20purchaser)

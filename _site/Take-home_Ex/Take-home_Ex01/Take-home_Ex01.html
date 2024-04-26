@@ -153,7 +153,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercise">    
         <li>
-    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex01" rel="" target="">
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html" rel="" target="">
  <span class="dropdown-text">Take-home Exercise 1</span></a>
   </li>  
     </ul>
@@ -188,14 +188,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started"><strong>Getting Started</strong></a>
   <ul class="collapse">
   <li><a href="#install-and-load-required-libraries" id="toc-install-and-load-required-libraries" class="nav-link" data-scroll-target="#install-and-load-required-libraries"><strong>Install and load required libraries</strong></a></li>
-  <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data"><strong>Importing Data</strong></a></li>
-  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation"><strong>Data Preparation</strong></a></li>
+  <li><a href="#import-data" id="toc-import-data" class="nav-link" data-scroll-target="#import-data"><strong>Import Data</strong></a></li>
   </ul></li>
-  <li><a href="#data-visualisations" id="toc-data-visualisations" class="nav-link" data-scroll-target="#data-visualisations"><strong>Data Visualisations</strong></a>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation"><strong>Data Preparation</strong></a>
   <ul class="collapse">
-  <li><a href="#within-private-purchases-count-no.-of-property-frequency-on-y-axis-and-transaction-price-x-axis-histogram.-overlap-with-hdb-purchases." id="toc-within-private-purchases-count-no.-of-property-frequency-on-y-axis-and-transaction-price-x-axis-histogram.-overlap-with-hdb-purchases." class="nav-link" data-scroll-target="#within-private-purchases-count-no.-of-property-frequency-on-y-axis-and-transaction-price-x-axis-histogram.-overlap-with-hdb-purchases."><strong>1. Within private purchases, count no. of property (frequency on y-axis) and transaction price (x-axis) –&gt; Histogram. overlap with HDB purchases.</strong></a></li>
-  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
+  <li><a href="#add-quarter-column" id="toc-add-quarter-column" class="nav-link" data-scroll-target="#add-quarter-column">Add “Quarter” column</a></li>
+  <li><a href="#check-for-duplicates" id="toc-check-for-duplicates" class="nav-link" data-scroll-target="#check-for-duplicates">Check for duplicates</a></li>
+  <li><a href="#check-for-missing-values" id="toc-check-for-missing-values" class="nav-link" data-scroll-target="#check-for-missing-values">Check for missing values</a></li>
+  <li><a href="#check-data-type" id="toc-check-data-type" class="nav-link" data-scroll-target="#check-data-type">Check data type</a></li>
+  <li><a href="#add-year-column" id="toc-add-year-column" class="nav-link" data-scroll-target="#add-year-column">Add “Year” column</a></li>
   </ul></li>
+  <li><a href="#data-visualizations" id="toc-data-visualizations" class="nav-link" data-scroll-target="#data-visualizations"><strong>Data Visualizations</strong></a>
+  <ul class="collapse">
+  <li><a href="#compare-transacted-price-by-type-of-sale" id="toc-compare-transacted-price-by-type-of-sale" class="nav-link" data-scroll-target="#compare-transacted-price-by-type-of-sale">Compare Transacted Price by Type of Sale</a></li>
+  <li><a href="#compare-no.-of-sales-by-quarter" id="toc-compare-no.-of-sales-by-quarter" class="nav-link" data-scroll-target="#compare-no.-of-sales-by-quarter">Compare No.&nbsp;of Sales by Quarter</a></li>
+  <li><a href="#compare-transacted-price-by-property-type" id="toc-compare-transacted-price-by-property-type" class="nav-link" data-scroll-target="#compare-transacted-price-by-property-type">Compare Transacted Price By Property Type</a></li>
+  </ul></li>
+  <li><a href="#summary-and-conclusion" id="toc-summary-and-conclusion" class="nav-link" data-scroll-target="#summary-and-conclusion"><strong>Summary and Conclusion</strong></a></li>
+  <li><a href="#key-references" id="toc-key-references" class="nav-link" data-scroll-target="#key-references"><strong>Key References</strong></a></li>
   </ul>
 </nav>
     </div>
@@ -228,7 +238,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">April 20, 2024</p>
+      <p class="date-modified">April 26, 2024</p>
     </div>
   </div>
     
@@ -239,7 +249,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="context" class="level2">
 <h2 class="anchored" data-anchor-id="context"><strong>Context</strong></h2>
-<p>There are two major residential property market in Singapore, namely public and private housing. Public housing aims to meet the basic need of the general public with monthly household income less than or equal to S$14,000. For families with monthly household income more than S$14,000, they need to turn to the private residential market.</p>
+<p>There are two major residential property markets in Singapore, namely public and private housing. Public housing aims to meet the basic need of the general public with monthly household income less than or equal to S$14,000. For families with monthly household income more than S$14,000, they need to turn to the private residential market.</p>
 <p>In this exercise, we will prepare 2-3 data visualisations to reveal the private residential market and sub-markets of Singapore for the 1st quarter of 2024.</p>
 </section>
 <section id="getting-started" class="level2">
@@ -259,21 +269,209 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, ggrepel, ggthemes, hrbrthemes, patchwork)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="importing-data" class="level3">
-<h3 class="anchored" data-anchor-id="importing-data"><strong>Importing Data</strong></h3>
+<section id="import-data" class="level3">
+<h3 class="anchored" data-anchor-id="import-data"><strong>Import Data</strong></h3>
 <p>As we are looking at the 1st quarter of 2024, we import the transaction data for 1 January 2024 to 31 March 2024, using <a href="https://readr.tidyverse.org/reference/read_delim.html"><em>read_csv()</em></a> of <a href="https://readr.tidyverse.org/"><strong>readr</strong></a> package. <strong>readr</strong> is one of the packages within the tidyverse package.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>residential <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'data/ResidentialTransaction20240414220633.csv'</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>residential2024Q1 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'data/ResidentialTransaction20240414220633.csv'</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We also import the transaction data in 2023, to compare with the 1st quarter of 2024:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>residential2023Q1 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'data/ResidentialTransaction20240308160536.csv'</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>residential2023Q2 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'data/ResidentialTransaction20240308160736.csv'</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>residential2023Q3 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'data/ResidentialTransaction20240308161009.csv'</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>residential2023Q4 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'data/ResidentialTransaction20240308161109.csv'</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="data-preparation" class="level3">
-<h3 class="anchored" data-anchor-id="data-preparation"><strong>Data Preparation</strong></h3>
-<p>Glimpse of data</p>
+</section>
+<section id="data-preparation" class="level2">
+<h2 class="anchored" data-anchor-id="data-preparation"><strong>Data Preparation</strong></h2>
+<section id="add-quarter-column" class="level3">
+<h3 class="anchored" data-anchor-id="add-quarter-column">Add “Quarter” column</h3>
+<p>For our analysis in the later part of this exercise, we need to add new columns “Year” and “Quarter” to indicate which quarter of the year each transaction took place in.</p>
+<p>For 2024 Q1 data:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(residential)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>residential2024Q1 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(residential2024Q1, <span class="at">Quarter =</span> <span class="st">'Q1'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For each quarter of 2023 data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>residential2023Q1 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(residential2023Q1, <span class="at">Quarter =</span> <span class="st">'Q1'</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>residential2023Q2 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(residential2023Q2, <span class="at">Quarter =</span> <span class="st">'Q2'</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>residential2023Q3 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(residential2023Q3, <span class="at">Quarter =</span> <span class="st">'Q3'</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>residential2023Q4 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(residential2023Q4, <span class="at">Quarter =</span> <span class="st">'Q4'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Combine all 4 quarters of 2023, to get a dataset with all transactions in 2023:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>residential2023 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(residential2023Q1, residential2023Q2, residential2023Q3, residential2023Q4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="check-for-duplicates" class="level3">
+<h3 class="anchored" data-anchor-id="check-for-duplicates">Check for duplicates</h3>
+<p>The code chunk below shows that there are no duplicates in the 2024 Q1 transaction data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>residential2024Q1[<span class="fu">duplicated</span>(residential2024Q1),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] Project Name                Transacted Price ($)       
+ [3] Area (SQFT)                 Unit Price ($ PSF)         
+ [5] Sale Date                   Address                    
+ [7] Type of Sale                Type of Area               
+ [9] Area (SQM)                  Unit Price ($ PSM)         
+[11] Nett Price($)               Property Type              
+[13] Number of Units             Tenure                     
+[15] Completion Date             Purchaser Address Indicator
+[17] Postal Code                 Postal District            
+[19] Postal Sector               Planning Region            
+[21] Planning Area               Quarter                    
+&lt;0 rows&gt; (or 0-length row.names)</code></pre>
+</div>
+</div>
+<p>Similarly, there are no duplicates in the 2023 transaction data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>residential2023[<span class="fu">duplicated</span>(residential2023),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] Project Name                Transacted Price ($)       
+ [3] Area (SQFT)                 Unit Price ($ PSF)         
+ [5] Sale Date                   Address                    
+ [7] Type of Sale                Type of Area               
+ [9] Area (SQM)                  Unit Price ($ PSM)         
+[11] Nett Price($)               Property Type              
+[13] Number of Units             Tenure                     
+[15] Completion Date             Purchaser Address Indicator
+[17] Postal Code                 Postal District            
+[19] Postal Sector               Planning Region            
+[21] Planning Area               Quarter                    
+&lt;0 rows&gt; (or 0-length row.names)</code></pre>
+</div>
+</div>
+</section>
+<section id="check-for-missing-values" class="level3">
+<h3 class="anchored" data-anchor-id="check-for-missing-values">Check for missing values</h3>
+<p>The&nbsp;<code>colSums()</code>&nbsp;function in the&nbsp;<strong>base</strong>&nbsp;package is used to check for missing values. The output of the code chunk below shows there are no missing values in the 2024 transaction data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(residential2024Q1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               Project Name        Transacted Price ($) 
+                          0                           0 
+                Area (SQFT)          Unit Price ($ PSF) 
+                          0                           0 
+                  Sale Date                     Address 
+                          0                           0 
+               Type of Sale                Type of Area 
+                          0                           0 
+                 Area (SQM)          Unit Price ($ PSM) 
+                          0                           0 
+              Nett Price($)               Property Type 
+                          0                           0 
+            Number of Units                      Tenure 
+                          0                           0 
+            Completion Date Purchaser Address Indicator 
+                          0                           0 
+                Postal Code             Postal District 
+                          0                           0 
+              Postal Sector             Planning Region 
+                          0                           0 
+              Planning Area                     Quarter 
+                          0                           0 </code></pre>
+</div>
+</div>
+<p>However, there are 6 missing values in the Area (SQM) column in the 2023 transaction data. As this makes up only 0.0274% of the 2023 transaction data, we will remove them from the subsequent analysis. The&nbsp;<code>na.omit()</code>&nbsp;function in the&nbsp;<strong>stats</strong>&nbsp;package is used to remove them from&nbsp;<code>residential2023</code>, which now has 21,898 observations and 21 variables. A confirmatory check is then made with the&nbsp;<code>colSums()</code>&nbsp;function in the&nbsp;<strong>base</strong>&nbsp;package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(residential2023))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               Project Name        Transacted Price ($) 
+                          0                           0 
+                Area (SQFT)          Unit Price ($ PSF) 
+                          0                           0 
+                  Sale Date                     Address 
+                          0                           0 
+               Type of Sale                Type of Area 
+                          0                           0 
+                 Area (SQM)          Unit Price ($ PSM) 
+                          6                           0 
+              Nett Price($)               Property Type 
+                          0                           0 
+            Number of Units                      Tenure 
+                          0                           0 
+            Completion Date Purchaser Address Indicator 
+                          0                           0 
+                Postal Code             Postal District 
+                          0                           0 
+              Postal Sector             Planning Region 
+                          0                           0 
+              Planning Area                     Quarter 
+                          0                           0 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>residential2023 <span class="ot">=</span> residential2023 <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(residential2023))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               Project Name        Transacted Price ($) 
+                          0                           0 
+                Area (SQFT)          Unit Price ($ PSF) 
+                          0                           0 
+                  Sale Date                     Address 
+                          0                           0 
+               Type of Sale                Type of Area 
+                          0                           0 
+                 Area (SQM)          Unit Price ($ PSM) 
+                          0                           0 
+              Nett Price($)               Property Type 
+                          0                           0 
+            Number of Units                      Tenure 
+                          0                           0 
+            Completion Date Purchaser Address Indicator 
+                          0                           0 
+                Postal Code             Postal District 
+                          0                           0 
+              Postal Sector             Planning Region 
+                          0                           0 
+              Planning Area                     Quarter 
+                          0                           0 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check that missing values have been removed.</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(residential2023)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 21,898
+Columns: 22
+$ `Project Name`                &lt;chr&gt; "THE REEF AT KING'S DOCK", "URBAN TREASU…
+$ `Transacted Price ($)`        &lt;dbl&gt; 2317000, 1823500, 1421112, 1258112, 1280…
+$ `Area (SQFT)`                 &lt;dbl&gt; 882.65, 882.65, 1076.40, 1033.34, 871.88…
+$ `Unit Price ($ PSF)`          &lt;dbl&gt; 2625, 2066, 1320, 1218, 1468, 1767, 1095…
+$ `Sale Date`                   &lt;chr&gt; "01 Jan 2023", "02 Jan 2023", "02 Jan 20…
+$ Address                       &lt;chr&gt; "12 HARBOURFRONT AVENUE #05-32", "205 JA…
+$ `Type of Sale`                &lt;chr&gt; "New Sale", "New Sale", "New Sale", "New…
+$ `Type of Area`                &lt;chr&gt; "Strata", "Strata", "Strata", "Strata", …
+$ `Area (SQM)`                  &lt;dbl&gt; 82.0, 82.0, 100.0, 96.0, 81.0, 308.7, 42…
+$ `Unit Price ($ PSM)`          &lt;dbl&gt; 28256, 22238, 14211, 13105, 15802, 19015…
+$ `Nett Price($)`               &lt;chr&gt; "-", "-", "-", "-", "-", "-", "-", "-", …
+$ `Property Type`               &lt;chr&gt; "Condominium", "Condominium", "Executive…
+$ `Number of Units`             &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ Tenure                        &lt;chr&gt; "99 yrs from 12/01/2021", "Freehold", "9…
+$ `Completion Date`             &lt;chr&gt; "Uncompleted", "Uncompleted", "Uncomplet…
+$ `Purchaser Address Indicator` &lt;chr&gt; "HDB", "Private", "HDB", "HDB", "HDB", "…
+$ `Postal Code`                 &lt;chr&gt; "097996", "419535", "269343", "269294", …
+$ `Postal District`             &lt;chr&gt; "04", "14", "27", "27", "28", "19", "10"…
+$ `Postal Sector`               &lt;chr&gt; "09", "41", "26", "26", "79", "54", "27"…
+$ `Planning Region`             &lt;chr&gt; "Central Region", "East Region", "North …
+$ `Planning Area`               &lt;chr&gt; "Bukit Merah", "Bedok", "Yishun", "Yishu…
+$ Quarter                       &lt;chr&gt; "Q1", "Q1", "Q1", "Q1", "Q1", "Q1", "Q1"…</code></pre>
+</div>
+</div>
+</section>
+<section id="check-data-type" class="level3">
+<h3 class="anchored" data-anchor-id="check-data-type">Check data type</h3>
+<p>A glimpse into the transaction data in 2024 shows that the Sale Date column is currently in the character data type instead of the Date data type:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(residential2024Q1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 4,902
-Columns: 21
+Columns: 22
 $ `Project Name`                &lt;chr&gt; "THE LANDMARK", "POLLEN COLLECTION", "SK…
 $ `Transacted Price ($)`        &lt;dbl&gt; 2726888, 3850000, 2346000, 2190000, 1954…
 $ `Area (SQFT)`                 &lt;dbl&gt; 1076.40, 1808.35, 1087.16, 807.30, 796.5…
@@ -294,118 +492,268 @@ $ `Postal Code`                 &lt;chr&gt; "169878", "807233", "469657", "11899
 $ `Postal District`             &lt;chr&gt; "03", "28", "16", "05", "21", "21", "28"…
 $ `Postal Sector`               &lt;chr&gt; "16", "80", "46", "11", "59", "58", "79"…
 $ `Planning Region`             &lt;chr&gt; "Central Region", "North East Region", "…
-$ `Planning Area`               &lt;chr&gt; "Outram", "Serangoon", "Bedok", "Queenst…</code></pre>
+$ `Planning Area`               &lt;chr&gt; "Outram", "Serangoon", "Bedok", "Queenst…
+$ Quarter                       &lt;chr&gt; "Q1", "Q1", "Q1", "Q1", "Q1", "Q1", "Q1"…</code></pre>
 </div>
 </div>
-<section id="check-for-duplicates" class="level4">
-<h4 class="anchored" data-anchor-id="check-for-duplicates">Check for duplicates</h4>
+<p>We convert it into Date data type using the following code:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(residential)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4,902 × 21
-   `Project Name`      `Transacted Price ($)` `Area (SQFT)` `Unit Price ($ PSF)`
-   &lt;chr&gt;                                &lt;dbl&gt;         &lt;dbl&gt;                &lt;dbl&gt;
- 1 THE LANDMARK                       2726888         1076.                 2533
- 2 POLLEN COLLECTION                  3850000         1808.                 2129
- 3 SKY EDEN@BEDOK                     2346000         1087.                 2158
- 4 TERRA HILL                         2190000          807.                 2713
- 5 PINETREE HILL                      1954000          797.                 2453
- 6 THE RESERVE RESIDE…                3412201         1324.                 2577
- 7 SUMMER VILLAS                      2960000         3531.                  838
- 8 THE MINTON                         1840000         1216.                 1513
- 9 SEMBAWANG HILLS ES…                4200000         2093.                 2007
-10 NV RESIDENCES                      1350000         1109.                 1218
-# ℹ 4,892 more rows
-# ℹ 17 more variables: `Sale Date` &lt;chr&gt;, Address &lt;chr&gt;, `Type of Sale` &lt;chr&gt;,
-#   `Type of Area` &lt;chr&gt;, `Area (SQM)` &lt;dbl&gt;, `Unit Price ($ PSM)` &lt;dbl&gt;,
-#   `Nett Price($)` &lt;chr&gt;, `Property Type` &lt;chr&gt;, `Number of Units` &lt;dbl&gt;,
-#   Tenure &lt;chr&gt;, `Completion Date` &lt;chr&gt;, `Purchaser Address Indicator` &lt;chr&gt;,
-#   `Postal Code` &lt;chr&gt;, `Postal District` &lt;chr&gt;, `Postal Sector` &lt;chr&gt;,
-#   `Planning Region` &lt;chr&gt;, `Planning Area` &lt;chr&gt;</code></pre>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>residential2024Q1<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="ot">&lt;-</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.Date</span>(<span class="fu">parse_date_time</span>(residential2024Q1<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span>, <span class="at">orders =</span> <span class="fu">c</span>(<span class="st">"%d %b %Y"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#all rows are unique. no duplicates.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="variable-selection" class="level4">
-<h4 class="anchored" data-anchor-id="variable-selection">Variable Selection</h4>
-</section>
-<section id="check-data-structure" class="level4">
-<h4 class="anchored" data-anchor-id="check-data-structure">Check data structure</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(residential)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Alternative method to check data type of each variable</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(residential2024Q1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>spc_tbl_ [4,902 × 21] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
- $ Project Name               : chr [1:4902] "THE LANDMARK" "POLLEN COLLECTION" "SKY EDEN@BEDOK" "TERRA HILL" ...
- $ Transacted Price ($)       : num [1:4902] 2726888 3850000 2346000 2190000 1954000 ...
- $ Area (SQFT)                : num [1:4902] 1076 1808 1087 807 797 ...
- $ Unit Price ($ PSF)         : num [1:4902] 2533 2129 2158 2713 2453 ...
- $ Sale Date                  : chr [1:4902] "01 Jan 2024" "01 Jan 2024" "01 Jan 2024" "01 Jan 2024" ...
- $ Address                    : chr [1:4902] "173 CHIN SWEE ROAD #22-11" "34 POLLEN PLACE" "1 BEDOK CENTRAL #09-10" "18A YEW SIANG ROAD #03-12" ...
- $ Type of Sale               : chr [1:4902] "New Sale" "New Sale" "New Sale" "New Sale" ...
- $ Type of Area               : chr [1:4902] "Strata" "Land" "Strata" "Strata" ...
- $ Area (SQM)                 : num [1:4902] 100 168 101 75 74 ...
- $ Unit Price ($ PSM)         : num [1:4902] 27269 22917 23228 29200 26405 ...
- $ Nett Price($)              : chr [1:4902] "-" "-" "-" "-" ...
- $ Property Type              : chr [1:4902] "Condominium" "Terrace House" "Apartment" "Apartment" ...
- $ Number of Units            : num [1:4902] 1 1 1 1 1 1 1 1 1 1 ...
- $ Tenure                     : chr [1:4902] "99 yrs from 28/08/2020" "99 yrs from 09/12/2019" "99 yrs from 05/01/2022" "Freehold" ...
- $ Completion Date            : chr [1:4902] "Uncompleted" "Uncompleted" "Uncompleted" "Uncompleted" ...
- $ Purchaser Address Indicator: chr [1:4902] "Private" "N.A" "HDB" "N.A" ...
- $ Postal Code                : chr [1:4902] "169878" "807233" "469657" "118992" ...
- $ Postal District            : chr [1:4902] "03" "28" "16" "05" ...
- $ Postal Sector              : chr [1:4902] "16" "80" "46" "11" ...
- $ Planning Region            : chr [1:4902] "Central Region" "North East Region" "East Region" "Central Region" ...
- $ Planning Area              : chr [1:4902] "Outram" "Serangoon" "Bedok" "Queenstown" ...
- - attr(*, "spec")=
-  .. cols(
-  ..   `Project Name` = col_character(),
-  ..   `Transacted Price ($)` = col_number(),
-  ..   `Area (SQFT)` = col_number(),
-  ..   `Unit Price ($ PSF)` = col_number(),
-  ..   `Sale Date` = col_character(),
-  ..   Address = col_character(),
-  ..   `Type of Sale` = col_character(),
-  ..   `Type of Area` = col_character(),
-  ..   `Area (SQM)` = col_number(),
-  ..   `Unit Price ($ PSM)` = col_number(),
-  ..   `Nett Price($)` = col_character(),
-  ..   `Property Type` = col_character(),
-  ..   `Number of Units` = col_double(),
-  ..   Tenure = col_character(),
-  ..   `Completion Date` = col_character(),
-  ..   `Purchaser Address Indicator` = col_character(),
-  ..   `Postal Code` = col_character(),
-  ..   `Postal District` = col_character(),
-  ..   `Postal Sector` = col_character(),
-  ..   `Planning Region` = col_character(),
-  ..   `Planning Area` = col_character()
-  .. )
- - attr(*, "problems")=&lt;externalptr&gt; </code></pre>
+<pre><code>'data.frame':   4902 obs. of  22 variables:
+ $ Project Name               : chr  "THE LANDMARK" "POLLEN COLLECTION" "SKY EDEN@BEDOK" "TERRA HILL" ...
+ $ Transacted Price ($)       : num  2726888 3850000 2346000 2190000 1954000 ...
+ $ Area (SQFT)                : num  1076 1808 1087 807 797 ...
+ $ Unit Price ($ PSF)         : num  2533 2129 2158 2713 2453 ...
+ $ Sale Date                  : Date, format: "2024-01-01" "2024-01-01" ...
+ $ Address                    : chr  "173 CHIN SWEE ROAD #22-11" "34 POLLEN PLACE" "1 BEDOK CENTRAL #09-10" "18A YEW SIANG ROAD #03-12" ...
+ $ Type of Sale               : chr  "New Sale" "New Sale" "New Sale" "New Sale" ...
+ $ Type of Area               : chr  "Strata" "Land" "Strata" "Strata" ...
+ $ Area (SQM)                 : num  100 168 101 75 74 ...
+ $ Unit Price ($ PSM)         : num  27269 22917 23228 29200 26405 ...
+ $ Nett Price($)              : chr  "-" "-" "-" "-" ...
+ $ Property Type              : chr  "Condominium" "Terrace House" "Apartment" "Apartment" ...
+ $ Number of Units            : num  1 1 1 1 1 1 1 1 1 1 ...
+ $ Tenure                     : chr  "99 yrs from 28/08/2020" "99 yrs from 09/12/2019" "99 yrs from 05/01/2022" "Freehold" ...
+ $ Completion Date            : chr  "Uncompleted" "Uncompleted" "Uncompleted" "Uncompleted" ...
+ $ Purchaser Address Indicator: chr  "Private" "N.A" "HDB" "N.A" ...
+ $ Postal Code                : chr  "169878" "807233" "469657" "118992" ...
+ $ Postal District            : chr  "03" "28" "16" "05" ...
+ $ Postal Sector              : chr  "16" "80" "46" "11" ...
+ $ Planning Region            : chr  "Central Region" "North East Region" "East Region" "Central Region" ...
+ $ Planning Area              : chr  "Outram" "Serangoon" "Bedok" "Queenstown" ...
+ $ Quarter                    : chr  "Q1" "Q1" "Q1" "Q1" ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#no issues</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Similarly, we convert the data type of “Sale Date” in <code>residential2023</code> from character data type to Date data type:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>residential2023<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="ot">&lt;-</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.Date</span>(<span class="fu">parse_date_time</span>(residential2023<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span>, <span class="at">orders =</span> <span class="fu">c</span>(<span class="st">"%d %b %Y"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>residential2023Q1<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="ot">&lt;-</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.Date</span>(<span class="fu">parse_date_time</span>(residential2023Q1<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span>, <span class="at">orders =</span> <span class="fu">c</span>(<span class="st">"%d %b %Y"</span>)))</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>residential2023Q2<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="ot">&lt;-</span> </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.Date</span>(<span class="fu">parse_date_time</span>(residential2023Q2<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span>, <span class="at">orders =</span> <span class="fu">c</span>(<span class="st">"%d %b %Y"</span>)))</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>residential2023Q3<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="ot">&lt;-</span> </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.Date</span>(<span class="fu">parse_date_time</span>(residential2023Q3<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span>, <span class="at">orders =</span> <span class="fu">c</span>(<span class="st">"%d %b %Y"</span>)))</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>residential2023Q4<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="ot">&lt;-</span> </span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.Date</span>(<span class="fu">parse_date_time</span>(residential2023Q4<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span>, <span class="at">orders =</span> <span class="fu">c</span>(<span class="st">"%d %b %Y"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
+<section id="add-year-column" class="level3">
+<h3 class="anchored" data-anchor-id="add-year-column">Add “Year” column</h3>
+<p>For our analysis in the later part of this exercise, we also add a new column “Year” to indicate which year each transaction took place in.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>residential2024Q1 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(residential2024Q1, </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">Year =</span> <span class="fu">as.character</span>(<span class="fu">year</span>(residential2024Q1<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>residential2023 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(residential2023, </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">Year =</span> <span class="fu">as.character</span>(<span class="fu">year</span>(residential2023<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>residential2023Q1 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(residential2023Q1, </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">Year =</span> <span class="fu">as.character</span>(<span class="fu">year</span>(residential2023Q1<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span>)))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>residential2023Q2 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(residential2023Q2, </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">Year =</span> <span class="fu">as.character</span>(<span class="fu">year</span>(residential2023Q2<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span>)))</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>residential2023Q3 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(residential2023Q3, </span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>                           <span class="at">Year =</span> <span class="fu">as.character</span>(<span class="fu">year</span>(residential2023Q3<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span>)))</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>residential2023Q4 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(residential2023Q4, </span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>                           <span class="at">Year =</span> <span class="fu">as.character</span>(<span class="fu">year</span>(residential2023Q4<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <section id="section" class="level4">
 <h4 class="anchored" data-anchor-id="section"></h4>
 </section>
-<section id="check-for-missing-data" class="level4">
-<h4 class="anchored" data-anchor-id="check-for-missing-data">Check for missing data</h4>
 </section>
 </section>
+<section id="data-visualizations" class="level2">
+<h2 class="anchored" data-anchor-id="data-visualizations"><strong>Data Visualizations</strong></h2>
+<section id="compare-transacted-price-by-type-of-sale" class="level3">
+<h3 class="anchored" data-anchor-id="compare-transacted-price-by-type-of-sale">Compare Transacted Price by Type of Sale</h3>
+<ol type="1">
+<li>Comparing Transacted Price by Type of Sale, in <u>2024 Q1</u></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>residential2024Q1, </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> <span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>,       </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">x=</span> <span class="st">`</span><span class="at">Type of Sale</span><span class="st">`</span>)) <span class="sc">+</span>    </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()            </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The above chart does not look very useful as the box plots look very squished due to a large range in transacted price.</p>
+<p>We remove two outliers, where Transacted price is at $39.5mil and $26.5mil:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>residential2024Q1_no_outlier <span class="ot">&lt;-</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  residential2024Q1[residential2024Q1<span class="sc">$</span><span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span> <span class="sc">&lt;</span> <span class="dv">26500000</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>and plot the box plots again:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>residential2024Q1_no_outlier, </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> <span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>,       </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">x=</span> <span class="st">`</span><span class="at">Type of Sale</span><span class="st">`</span>)) <span class="sc">+</span>    </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Transacted Prices in 2024 Q1"</span>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The above data visualisation shows that in 2024 Q1, the median transacted price for resale is slightly lower than that of new sale. This is surprising considering that resale is usually deemed to be more expensive. However, the range of prices for resale is also larger as compared to new sale or sub sale, as shown by its larger interquartile range (IQR).</p>
+<p>We repeat the same steps for 2023 Q1 transaction data, to see if there is any difference with 2024 Q1:</p>
+<ol start="2" type="1">
+<li>Comparing Transacted Price by Type of Sale, in <u>2023 Q1</u></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>residential2023Q1, </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> <span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>,       </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">x=</span> <span class="st">`</span><span class="at">Type of Sale</span><span class="st">`</span>)) <span class="sc">+</span>    </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Removing the outlier (where Transacted Price &gt; $30mil) and plotting the box plots again:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>residential2023Q1_no_outlier <span class="ot">&lt;-</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  residential2023Q1[residential2023Q1<span class="sc">$</span><span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span> <span class="sc">&lt;</span> <span class="dv">30000000</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>residential2023Q1_no_outlier, </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> <span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>,       </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">x=</span> <span class="st">`</span><span class="at">Type of Sale</span><span class="st">`</span>)) <span class="sc">+</span>    </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Transacted Prices in 2023 Q1"</span>)</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Similar to 2024 Q1, the above chart shows that the median transacted price is lower for resale (as compared to new sale). However, the interquartile range of transacted prices of resale and new sale are similar, and the interquartile range of transacted prices for sub sale is much smaller this time.</p>
+<p>It would be useful to compare these plots side-by-side for comparison of the same quarter in different years. We can use the patchwork package to do so:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">|</span> p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Potential improvements to the above composite plot:</p>
+<ul>
+<li><p>Synchronise the Type of Sale axis for both 2024 Q1 and 2023 Q1</p></li>
+<li><p>Synchronise the Transacted Price ($) axis for both 2024 Q1 and 2023 Q1, for better comparison between the two plots.</p></li>
+</ul>
 </section>
-<section id="data-visualisations" class="level2">
-<h2 class="anchored" data-anchor-id="data-visualisations"><strong>Data Visualisations</strong></h2>
-<section id="within-private-purchases-count-no.-of-property-frequency-on-y-axis-and-transaction-price-x-axis-histogram.-overlap-with-hdb-purchases." class="level3">
-<h3 class="anchored" data-anchor-id="within-private-purchases-count-no.-of-property-frequency-on-y-axis-and-transaction-price-x-axis-histogram.-overlap-with-hdb-purchases."><strong>1. Within private purchases, count no. of property (frequency on y-axis) and transaction price (x-axis) –&gt; Histogram. overlap with HDB purchases.</strong></h3>
-<p>KIV ideas</p>
-<p><strong>1. Average Transacted Price and Purchaser Address Indicator (HDB/Private/N.A.) use bar chart- KIV</strong></p>
-<p><strong>2. Within private purchases, compare transacted prices by property type - KIV</strong></p>
+<section id="compare-no.-of-sales-by-quarter" class="level3">
+<h3 class="anchored" data-anchor-id="compare-no.-of-sales-by-quarter">Compare No.&nbsp;of Sales by Quarter</h3>
+<p>We would like to see whether there is any difference in the number of transactions in each quarter. We can visualise this using a bar chart.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>residential2023, </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>Quarter)) <span class="sc">+</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">'No. of Transactions in each Quarter (2023)'</span>) <span class="sc">+</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">'No. of Transactions'</span>)</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>p3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The above bar chart shows that in 2023, there were more transactions taking place in <strong>Q2 and Q3 (i.e., April to September)</strong>, compared to Q1 (January to March) and Q4 (October to December). A possible reason why there are fewer transactions in Q1 may be because of the Chinese New Year celebrations in Singapore, and a possible reason why there are fewer transactions in Q4 may be because it’s during the school holidays where families tend to go for overseas vacations instead of buying property.</p>
+<p>We also compare 2023 Q1 sale with 2024 Q1 sale:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>residentialQ1 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(residential2023Q1, residential2024Q1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>residentialQ1, </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>Year)) <span class="sc">+</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">'Comparing Q1 Sales'</span>) <span class="sc">+</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">'No. of Transactions'</span>)</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>p4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The above plot shows that the number of transactions in 2024 Q1 is almost the same than the number of transactions in 2023 Q1 (only slightly higher).</p>
+<p>We put both bar charts together in a composite plot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>p3 <span class="sc">+</span> p4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section>
-<section id="section-1" class="level3">
-<h3 class="anchored" data-anchor-id="section-1"></h3>
+<section id="compare-transacted-price-by-property-type" class="level3">
+<h3 class="anchored" data-anchor-id="compare-transacted-price-by-property-type">Compare Transacted Price By Property Type</h3>
+<p>First, we combine all the data into one combined dataset:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>residential <span class="ot">&lt;-</span> <span class="fu">rbind</span>(residential2023Q1, residential2023Q2, residential2023Q3, residential2023Q4, residential2024Q1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we plot a box plot of transacted prices by property type:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>residential, </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> <span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>,       </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">x=</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>)) <span class="sc">+</span>    </span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Transacted Prices by Property Type"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Removing data points which Transacted Price &gt; 100million, so that we can see the box plots better:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>residential_no_outlier <span class="ot">&lt;-</span> </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  residential[residential<span class="sc">$</span><span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span> <span class="sc">&lt;</span> <span class="dv">100000000</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>residential_no_outlier, </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> <span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>,       </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">x=</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>)) <span class="sc">+</span>    </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Transacted Prices by Property Type (&lt; $100mil)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The above box plot shows that the property type with the highest median price is <strong>Detached House</strong>. It also has the largest interquartile range.</p>
+</section>
+</section>
+<section id="summary-and-conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="summary-and-conclusion"><strong>Summary and Conclusion</strong></h2>
+<ol type="1">
+<li><p>The median price for resale property is surprisingly, lower than that of new sale. However, the prices of resale property also have higher variability.</p></li>
+<li><p>There are more sales in Q2 and Q3, as compared to Q1 or Q4.</p></li>
+<li><p>The property type with the highest median price is Detached House.</p></li>
+</ol>
+</section>
+<section id="key-references" class="level2">
+<h2 class="anchored" data-anchor-id="key-references"><strong>Key References</strong></h2>
+<p><a href="https://r4va.netlify.app/">R for Visual Analytics</a></p>
+<p><a href="https://www.ura.gov.sg/reis/dataDictionary#:~:text=Purchaser%20Address%20Indicator%3A%20It%20refers,is%20owned%20by%20the%20purchaser">URA Data Dictionary</a></p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
