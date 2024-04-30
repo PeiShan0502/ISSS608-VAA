@@ -1,8 +1,8 @@
 ---
-title: "Take-home Exercise 1"
+title: "Take-home Exercise 1: Creating data visualisation beyond default"
 author: "Kwok Pei Shan"
 date: "April 16, 2024"
-date-modified: "April 26, 2024"
+date-modified: "last-modified"
 execute: 
   eval: true
   echo: true
