@@ -1,0 +1,113 @@
+---
+title: "In-class Exercise 6b: MC3 Kick-Starter"
+author: Kwok Pei Shan
+date: "May 18, 2024"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Load R Packages
+
+```{r}
+pacman::p_load(jsonlite, tidygraph, ggraph,
+               visNetwork, graphlayouts, ggforce,
+               skimr, tidytext, tidyverse)
+```
+
+## Load Data
+
+In the code chunk below, `fromJSON()` of **jsonlite** package is used to import *MC3.json* into R environment.
+
+```{r}
+mc3_data <- fromJSON("data/MC3.json")
+```
+
+```{r}
+class(mc3_data)
+```
+
+The output is called *mc3_data*. It is a large list R object.
+
+### Extracting edges
+
+The code chunk below extracts the *links* data.frame of *mc3_data* and save it as a tibble data.frame called *mc3_edges*.
+
+```{r}
+mc3_edges <- 
+  as_tibble(mc3_data$links) %>%
+  distinct() %>%
+  mutate(source =
+           as.character(source),
+         target = 
+           as.character(target),
+         type =
+           as.character(type)) %>%
+  group_by(source, target, type) %>%
+    summarise(weights = n()) %>%
+  filter(source != target) %>%
+  ungroup()
+```
+:::callout_note() Things to note:
+-   `distinct()`: to ensure that there are no duplicate records. A record is treated as duplicate if the source and target are the same with another record.
+
+-   `as.character(source)`, `as.character(target)`: to avoid potential problems later on, explicitly encode both data types to string/ character data type.
+
+-   `group_by` and `summarise`: to count no. of records between each source and target.
+
+```{r}
+mc3_nodes <- as_tibble(mc3_data$nodes) %>%
+  mutate(country = as.character(country),
+         id = as.character(id),
+         product_services = as.character(product_services),
+         revenue_omu = as.numeric(as.character(revenue_omu)),
+         type = as.character(type)) %>%
+  select(id, country, type, revenue_omu, product_services)
+```
+When we cleaned the nodes data, we removed some of the nodes?? so we have to do this now. left join, so excess ones from mc3_nodes will be left out
+
+```{r}
+id1 <- mc3_edges %>%
+  select(source) %>%
+  rename(id = source)
+
+id2 <- mc3_edges %>%
+  select(target) %>%
+  rename(id = target)
+
+mc3_nodes1 <- rbind(id1, id2) %>%
+  distinct() %>%
+  left_join(mc3_nodes,
+            unmatched = "drop")
+```
+
+
+finally construct graph:
+```{r}
+mc3_graph <- tbl_graph(nodes = mc3_nodes1,
+                       edges = mc3_edges,
+                       directed = FALSE) %>%
+  mutate(betweenness_centrality =
+           centrality_betweenness(),
+         closeness_centrality = 
+           centrality_closeness())
+```
+
+
+Build graph visualisation:
+```{r}
+mc3_graph %>%
+  filter(betweenness_centrality >= 300000) %>%
+ggraph(layout = "fr") +
+  geom_edge_link(aes(alpha = 0.5)) +
+  geom_node_point(aes(
+    size = betweenness_centrality,
+    colors = "lightblue",
+    alpha = 0.5)) +
+  scale_size_continuous(range = c(1,10)) +
+  theme_graph()
+```
+

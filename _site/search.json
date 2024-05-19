@@ -642,5 +642,145 @@
     "title": "Hands-on Exercise 5: Visualising and Analysing Text Data with R: tidytext methods",
     "section": "References",
     "text": "References\n\nwidyr\n\nReference guide\n\nwidyr: Widen, process, and re-tidy a dataset\nUnited Nations Voting Correlations"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05a.html",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05a.html",
+    "title": "In-class Exercise 5a",
+    "section": "",
+    "text": "pacman::p_load(tidyverse, readtext,\n               quanteda, tidytext)\n\n\ntext_data &lt;- readtext(paste0(\"data/articles\", \"/*\"))\n\n#alternative code: text_data &lt;- readtext(\"data/articles/*\")\n\n\ncorpus_text &lt;- corpus(text_data)\nsummary(corpus_text, 5)\n\nCorpus consisting of 338 documents, showing 5 documents:\n\n                                   Text Types Tokens Sentences\n Alvarez PLC__0__0__Haacklee Herald.txt   206    433        18\n    Alvarez PLC__0__0__Lomark Daily.txt   102    170        12\n   Alvarez PLC__0__0__The News Buoy.txt    90    200         9\n Alvarez PLC__0__1__Haacklee Herald.txt    96    187         8\n    Alvarez PLC__0__1__Lomark Daily.txt   241    504        21\n\n\nTokenisation and removing stop words:\n\nusenet_words &lt;- text_data %&gt;%\n  unnest_tokens(word, text) %&gt;%\n  filter(str_detect(word, \"[a-z']$\"),\n  !word %in% stop_words$word)\n\nWord count, show in descending order (word with highest count at the top).\n\nusenet_words %&gt;%\n  count(word, sort = TRUE)\n\nreadtext object consisting of 3260 documents and 0 docvars.\n# A data frame: 3,260 × 3\n  word             n text     \n  &lt;chr&gt;        &lt;int&gt; &lt;chr&gt;    \n1 fishing       2177 \"\\\"\\\"...\"\n2 sustainable   1525 \"\\\"\\\"...\"\n3 company       1036 \"\\\"\\\"...\"\n4 practices      838 \"\\\"\\\"...\"\n5 industry       715 \"\\\"\\\"...\"\n6 transactions   696 \"\\\"\\\"...\"\n# ℹ 3,254 more rows\n\n\n\ntext_data_splitted &lt;- text_data %&gt;%\n  separate_wider_delim(\"doc_id\",\n                       delim = \"__0__\",\n                       names = c(\"X\", \"Y\"),\n                       too_few = \"align_end\")\n\n#separate_wider_delim from tidyr package."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05a.html#installing-r-packages",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05a.html#installing-r-packages",
+    "title": "In-class Exercise 5a",
+    "section": "",
+    "text": "pacman::p_load(tidyverse, readtext,\n               quanteda, tidytext)\n\n\ntext_data &lt;- readtext(paste0(\"data/articles\", \"/*\"))\n\n#alternative code: text_data &lt;- readtext(\"data/articles/*\")\n\n\ncorpus_text &lt;- corpus(text_data)\nsummary(corpus_text, 5)\n\nCorpus consisting of 338 documents, showing 5 documents:\n\n                                   Text Types Tokens Sentences\n Alvarez PLC__0__0__Haacklee Herald.txt   206    433        18\n    Alvarez PLC__0__0__Lomark Daily.txt   102    170        12\n   Alvarez PLC__0__0__The News Buoy.txt    90    200         9\n Alvarez PLC__0__1__Haacklee Herald.txt    96    187         8\n    Alvarez PLC__0__1__Lomark Daily.txt   241    504        21\n\n\nTokenisation and removing stop words:\n\nusenet_words &lt;- text_data %&gt;%\n  unnest_tokens(word, text) %&gt;%\n  filter(str_detect(word, \"[a-z']$\"),\n  !word %in% stop_words$word)\n\nWord count, show in descending order (word with highest count at the top).\n\nusenet_words %&gt;%\n  count(word, sort = TRUE)\n\nreadtext object consisting of 3260 documents and 0 docvars.\n# A data frame: 3,260 × 3\n  word             n text     \n  &lt;chr&gt;        &lt;int&gt; &lt;chr&gt;    \n1 fishing       2177 \"\\\"\\\"...\"\n2 sustainable   1525 \"\\\"\\\"...\"\n3 company       1036 \"\\\"\\\"...\"\n4 practices      838 \"\\\"\\\"...\"\n5 industry       715 \"\\\"\\\"...\"\n6 transactions   696 \"\\\"\\\"...\"\n# ℹ 3,254 more rows\n\n\n\ntext_data_splitted &lt;- text_data %&gt;%\n  separate_wider_delim(\"doc_id\",\n                       delim = \"__0__\",\n                       names = c(\"X\", \"Y\"),\n                       too_few = \"align_end\")\n\n#separate_wider_delim from tidyr package."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06b.html",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06b.html",
+    "title": "In-class Exercise 6b: MC3 Kick-Starter",
+    "section": "",
+    "text": "pacman::p_load(jsonlite, tidygraph, ggraph,\n               visNetwork, graphlayouts, ggforce,\n               skimr, tidytext, tidyverse)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06b.html#load-r-packages",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06b.html#load-r-packages",
+    "title": "In-class Exercise 6b: MC3 Kick-Starter",
+    "section": "",
+    "text": "pacman::p_load(jsonlite, tidygraph, ggraph,\n               visNetwork, graphlayouts, ggforce,\n               skimr, tidytext, tidyverse)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06b.html#load-data",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06b.html#load-data",
+    "title": "In-class Exercise 6b: MC3 Kick-Starter",
+    "section": "Load Data",
+    "text": "Load Data\nIn the code chunk below, fromJSON() of jsonlite package is used to import MC3.json into R environment.\n\nmc3_data &lt;- fromJSON(\"data/MC3.json\")\n\n\nclass(mc3_data)\n\n[1] \"list\"\n\n\nThe output is called mc3_data. It is a large list R object.\n\nExtracting edges\nThe code chunk below extracts the links data.frame of mc3_data and save it as a tibble data.frame called mc3_edges.\n\nmc3_edges &lt;- \n  as_tibble(mc3_data$links) %&gt;%\n  distinct() %&gt;%\n  mutate(source =\n           as.character(source),\n         target = \n           as.character(target),\n         type =\n           as.character(type)) %&gt;%\n  group_by(source, target, type) %&gt;%\n    summarise(weights = n()) %&gt;%\n  filter(source != target) %&gt;%\n  ungroup()\n\n:::callout_note() Things to note: - distinct(): to ensure that there are no duplicate records. A record is treated as duplicate if the source and target are the same with another record.\n\nas.character(source), as.character(target): to avoid potential problems later on, explicitly encode both data types to string/ character data type.\ngroup_by and summarise: to count no. of records between each source and target.\n\n\nmc3_nodes &lt;- as_tibble(mc3_data$nodes) %&gt;%\n  mutate(country = as.character(country),\n         id = as.character(id),\n         product_services = as.character(product_services),\n         revenue_omu = as.numeric(as.character(revenue_omu)),\n         type = as.character(type)) %&gt;%\n  select(id, country, type, revenue_omu, product_services)\n\nWhen we cleaned the nodes data, we removed some of the nodes?? so we have to do this now. left join, so excess ones from mc3_nodes will be left out\n\nid1 &lt;- mc3_edges %&gt;%\n  select(source) %&gt;%\n  rename(id = source)\n\nid2 &lt;- mc3_edges %&gt;%\n  select(target) %&gt;%\n  rename(id = target)\n\nmc3_nodes1 &lt;- rbind(id1, id2) %&gt;%\n  distinct() %&gt;%\n  left_join(mc3_nodes,\n            unmatched = \"drop\")\n\nfinally construct graph:\n\nmc3_graph &lt;- tbl_graph(nodes = mc3_nodes1,\n                       edges = mc3_edges,\n                       directed = FALSE) %&gt;%\n  mutate(betweenness_centrality =\n           centrality_betweenness(),\n         closeness_centrality = \n           centrality_closeness())\n\nBuild graph visualisation:\n\nmc3_graph %&gt;%\n  filter(betweenness_centrality &gt;= 300000) %&gt;%\nggraph(layout = \"fr\") +\n  geom_edge_link(aes(alpha = 0.5)) +\n  geom_node_point(aes(\n    size = betweenness_centrality,\n    colors = \"lightblue\",\n    alpha = 0.5)) +\n  scale_size_continuous(range = c(1,10)) +\n  theme_graph()"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05b.html",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05b.html",
+    "title": "In-class Exercise 5b",
+    "section": "",
+    "text": "pacman::p_load(jsonlite, tidyverse)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05b.html#load-packages",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05b.html#load-packages",
+    "title": "In-class Exercise 5b",
+    "section": "",
+    "text": "pacman::p_load(jsonlite, tidyverse)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05b.html#load-data",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05b.html#load-data",
+    "title": "In-class Exercise 5b",
+    "section": "Load data",
+    "text": "Load data\nIn the code chunk below, fromJSON() of jsonlite package is used to import the JSON files into R environment:\n\nmc1_data &lt;- fromJSON(\"data/mc1.json\")\n\n\nmc2_data &lt;- fromJSON(\"data/mc2.json\")\n\n\nmc3_data &lt;- fromJSON(\"data/mc3-v1.json\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html",
+    "title": "Hands-on Exercise 6: Modelling, Visualising and Analysing Network Data with R",
+    "section": "",
+    "text": "In this hands-on exercise, we will learn how to model, analyse and visualise network data using R:\n\ncreate graph object data frames, manipulate them using appropriate functions of dplyr, lubridate, and tidygraph,\nbuild network graph visualisation using appropriate functions of ggraph,\ncompute network geometrics using tidygraph,\nbuild advanced graph visualisation by incorporating the network geometrics, and\nbuild interactive network visualisation using visNetwork package."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#overview",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#overview",
+    "title": "Hands-on Exercise 6: Modelling, Visualising and Analysing Network Data with R",
+    "section": "",
+    "text": "In this hands-on exercise, we will learn how to model, analyse and visualise network data using R:\n\ncreate graph object data frames, manipulate them using appropriate functions of dplyr, lubridate, and tidygraph,\nbuild network graph visualisation using appropriate functions of ggraph,\ncompute network geometrics using tidygraph,\nbuild advanced graph visualisation by incorporating the network geometrics, and\nbuild interactive network visualisation using visNetwork package."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#getting-started",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#getting-started",
+    "title": "Hands-on Exercise 6: Modelling, Visualising and Analysing Network Data with R",
+    "section": "Getting Started",
+    "text": "Getting Started\n\nInstalling and launching R packages\nIn this hands-on exercise, four network data modelling and visualisation packages will be installed and launched. They are igraph, tidygraph, ggraph and visNetwork. Beside these four packages, tidyverse and lubridate, an R package specially designed to handle and wrangling time data will be installed and launched too.\n\npacman::p_load(igraph, tidygraph, ggraph, \n               visNetwork, lubridate, clock,\n               tidyverse, graphlayouts)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#the-data",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#the-data",
+    "title": "Hands-on Exercise 6: Modelling, Visualising and Analysing Network Data with R",
+    "section": "The Data",
+    "text": "The Data\nThe data sets used in this hands-on exercise is from an oil exploration and extraction company. There are two data sets. One contains the nodes data and the other contains the edges data.\n\nThe edges data\n\nGAStech-email_edges.csv which consists of two weeks of 9063 emails correspondences between 55 employees.\n\n\n\nThe nodes data\n\nGAStech_email_nodes.csv which consist of the names, department and title of the 55 employees.\n\n\n\nImporting network data from files\nIn this step, you will import GAStech_email_node.csv and GAStech_email_edges-v2.csv into RStudio environment by using read_csv() of readr package.\n\nGAStech_nodes &lt;- read_csv(\"data/GAStech_email_node.csv\")\nGAStech_edges &lt;- read_csv(\"data/GAStech_email_edge-v2.csv\")\n\n\n\nReviewing the imported data\nNext, we will examine the structure of the data frame using glimpse() of dplyr.\n\nglimpse(GAStech_edges)\n\nRows: 9,063\nColumns: 8\n$ source      &lt;dbl&gt; 43, 43, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 26, 26, 26…\n$ target      &lt;dbl&gt; 41, 40, 51, 52, 53, 45, 44, 46, 48, 49, 47, 54, 27, 28, 29…\n$ SentDate    &lt;chr&gt; \"6/1/2014\", \"6/1/2014\", \"6/1/2014\", \"6/1/2014\", \"6/1/2014\"…\n$ SentTime    &lt;time&gt; 08:39:00, 08:39:00, 08:58:00, 08:58:00, 08:58:00, 08:58:0…\n$ Subject     &lt;chr&gt; \"GT-SeismicProcessorPro Bug Report\", \"GT-SeismicProcessorP…\n$ MainSubject &lt;chr&gt; \"Work related\", \"Work related\", \"Work related\", \"Work rela…\n$ sourceLabel &lt;chr&gt; \"Sven.Flecha\", \"Sven.Flecha\", \"Kanon.Herrero\", \"Kanon.Herr…\n$ targetLabel &lt;chr&gt; \"Isak.Baza\", \"Lucas.Alcazar\", \"Felix.Resumir\", \"Hideki.Coc…\n\n\nThe output report of GAStech_edges above reveals that the SentDate is treated as “Character” data type instead of date data type. This is an error! Before we continue, it is important for us to change the data type of SentDate field back to “Date”” data type.\n\n\nWrangling time\nThe code chunk below will be used to perform the changes.\n\nGAStech_edges &lt;- GAStech_edges %&gt;%\n  mutate(SendDate = dmy(SentDate)) %&gt;%\n  mutate(Weekday = wday(SentDate,\n                        label = TRUE,\n                        abbr = FALSE))\n\n\nboth dmy() and wday() are functions of lubridate package. lubridate is an R package that makes it easier to work with dates and times.\ndmy() transforms the SentDate to Date data type.\nwday() returns the day of the week as a decimal number or an ordered factor if label is TRUE. The argument abbr = FALSE keeps the day spelling in full, i.e. Monday. The function will create a new column in the data.frame i.e. Weekday and the output of wday() will save in this newly created field.\nthe values in the Weekday field are in ordinal scale.\n\n\n\nReviewing the revised date fields\nTable below shows the data structure of the reformatted GAStech_edges data frame:\n\nglimpse(GAStech_edges)\n\nRows: 9,063\nColumns: 10\n$ source      &lt;dbl&gt; 43, 43, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 26, 26, 26…\n$ target      &lt;dbl&gt; 41, 40, 51, 52, 53, 45, 44, 46, 48, 49, 47, 54, 27, 28, 29…\n$ SentDate    &lt;chr&gt; \"6/1/2014\", \"6/1/2014\", \"6/1/2014\", \"6/1/2014\", \"6/1/2014\"…\n$ SentTime    &lt;time&gt; 08:39:00, 08:39:00, 08:58:00, 08:58:00, 08:58:00, 08:58:0…\n$ Subject     &lt;chr&gt; \"GT-SeismicProcessorPro Bug Report\", \"GT-SeismicProcessorP…\n$ MainSubject &lt;chr&gt; \"Work related\", \"Work related\", \"Work related\", \"Work rela…\n$ sourceLabel &lt;chr&gt; \"Sven.Flecha\", \"Sven.Flecha\", \"Kanon.Herrero\", \"Kanon.Herr…\n$ targetLabel &lt;chr&gt; \"Isak.Baza\", \"Lucas.Alcazar\", \"Felix.Resumir\", \"Hideki.Coc…\n$ SendDate    &lt;date&gt; 2014-01-06, 2014-01-06, 2014-01-06, 2014-01-06, 2014-01-0…\n$ Weekday     &lt;ord&gt; Friday, Friday, Friday, Friday, Friday, Friday, Friday, Fr…\n\n\n\n\nWrangling attributes\nA close examination of GAStech_edges data.frame reveals that it consists of individual e-mail flow records. This is not very useful for visualisation.\nIn view of this, we will aggregate the individual by date, senders, receivers, main subject and day of the week.\n\nGAStech_edges_aggregated &lt;- GAStech_edges %&gt;%\n  filter(MainSubject == \"Work related\") %&gt;%\n  group_by(source, target, Weekday) %&gt;%\n    summarise(Weight = n()) %&gt;%\n  filter(source!=target) %&gt;%\n  filter(Weight &gt; 1) %&gt;%\n  ungroup()\n\n\nfour functions from dplyr package are used. They are: filter(), group(), summarise(), and ungroup().\nThe output data.frame is called GAStech_edges_aggregated.\nA new field called Weight has been added in GAStech_edges_aggregated.\n\n\n\nReviewing the revised edges file\nTable below shows the data structure of the reformatted GAStech_edges_aggregated data frame\n\nglimpse(GAStech_edges_aggregated)\n\nRows: 1,372\nColumns: 4\n$ source  &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…\n$ target  &lt;dbl&gt; 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6,…\n$ Weekday &lt;ord&gt; Sunday, Monday, Tuesday, Wednesday, Friday, Sunday, Monday, Tu…\n$ Weight  &lt;int&gt; 5, 2, 3, 4, 6, 5, 2, 3, 4, 6, 5, 2, 3, 4, 6, 5, 2, 3, 4, 6, 5,…"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#creating-network-objects-using-tidygraph",
+    "href": "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html#creating-network-objects-using-tidygraph",
+    "title": "Hands-on Exercise 6: Modelling, Visualising and Analysing Network Data with R",
+    "section": "Creating network objects using tidygraph",
+    "text": "Creating network objects using tidygraph\nIn this section, we will learn how to create a graph data model by using tidygraph package. It provides a tidy API for graph/network manipulation. While network data itself is not tidy, it can be envisioned as two tidy tables, one for node data and one for edge data. tidygraph provides a way to switch between the two tables and provides dplyr verbs for manipulating them. Furthermore it provides access to a lot of graph algorithms with return values that facilitate their use in a tidy workflow.\n\nIntroducing tidygraph\ntidygraph 1.1 - A tidy hope\n\n\nThe tbl_graph object\nTwo functions of tidygraph package can be used to create network objects, they are:\n\ntbl_graph() creates a tbl_graph network object from nodes and edges data.\nas_tbl_graph() converts network data and objects to a tbl_graph network. Below are network data and objects supported by as_tbl_graph()\n\na node data.frame and an edge data.frame,\ndata.frame, list, matrix from base,\nigraph from igraph,\nnetwork from network,\ndendrogram and hclust from stats,\nNode from data.tree,\nphylo and evonet from ape, and\ngraphNEL, graphAM, graphBAM from graph (in Bioconductor).\n\n\n\n\nThe dplyr verbs in tidygraph\n\nactivate() verb from tidygraph serves as a switch between tibbles for nodes and edges. All dplyr verbs applied to tbl_graph object are applied to the active tibble."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06a.html",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06a.html",
+    "title": "In-class Exercise 6",
+    "section": "",
+    "text": "pacman::p_load(tidyverse, readtext, \ncorporaexplorer,\n               quanteda, stringi, rvest, tidytext)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06a.html#load-r-packages",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06a.html#load-r-packages",
+    "title": "In-class Exercise 6",
+    "section": "",
+    "text": "pacman::p_load(tidyverse, readtext, \ncorporaexplorer,\n               quanteda, stringi, rvest, tidytext)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06a.html#load-data",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06a.html#load-data",
+    "title": "In-class Exercise 6",
+    "section": "Load Data",
+    "text": "Load Data\nReference: Exploring the King James Bible\n\nbible &lt;- readr::read_lines(\"http://www.gutenberg.org/cache/epub/10/pg10.txt\")"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06a.html#text-pre-processing",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06a.html#text-pre-processing",
+    "title": "In-class Exercise 6",
+    "section": "Text Pre-processing",
+    "text": "Text Pre-processing\n\n\n\n# Collapsing into one string.\nbible &lt;- paste(bible, collapse = \"\\n\")\n\n\n\n\n# Identifying the beginning and end of the Bible / stripping PJ metadata\n # (technique borrowed from https://quanteda.io/articles/pkgdown/replication/digital-humanities.html).\nstart_v &lt;- stri_locate_first_fixed(bible, \"The First Book of Moses: Called Genesis\")[1]\nend_v &lt;- stri_locate_last_fixed(bible, \"Amen.\")[2]\nbible &lt;- stri_sub(bible, start_v, end_v)\n\n\n# In the file, every book in the bible is preceded by five newlines,\n  # which we use to split our string into a vector where each element is a book.\nbooks &lt;- stri_split_regex(bible, \"\\n{5}\") %&gt;%\n    unlist %&gt;%\n    .[-40]  # Removing the heading \"The New Testament of the King James Bible\",\n              # which also was preceded by five newlines.\n\n\n# Because of the structure of the text in the file:\n  # Replacing double or more newlines with two newlines, and a single newline with space.\nbooks &lt;- str_replace_all(books, \"\\n{2,}\", \"NEW_PARAGRAPH\") %&gt;%\n    str_replace_all(\"\\n\", \" \") %&gt;%\n    str_replace_all(\"NEW_PARAGRAPH\", \"\\n\\n\")\nbooks &lt;- books[3:68]  # The two first elements are not books\n\n\n# Identifying new chapters within each book and split the text into chapters.\n# (The first characters in chapter 2 will e.g. be 2:1)\nchapters &lt;- str_replace_all(books, \"(\\\\d+:1 )\", \"NEW_CHAPTER\\\\1\") %&gt;%\n    stri_split_regex(\"NEW_CHAPTER\")\n\n\n# Removing the chapter headings from the text (we want them as metadata).\nchapters &lt;- lapply(chapters, function(x) x[-1])"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06a.html#metadata",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06a.html#metadata",
+    "title": "In-class Exercise 6",
+    "section": "Metadata",
+    "text": "Metadata\n\n# We are not quite happy with the long book titles in the King James Bible,\n  # so we retrieve shorter versions from esv.org which will take up less\n  # space in the corpus map plot.\nbook_titles &lt;- read_html(\"https://www.esv.org/resources/esv-global-study-bible/list-of-abbreviations\") %&gt;%\n  html_nodes(\"td:nth-child(1)\") %&gt;%\n  html_text() %&gt;%\n  .[13:78]  # Removing irrelevant elements after manual inspection.\n\n\n# We add a column indicating whether a book belongs to the Old or New Testament,\n#   knowing that they contain respectively 39 and 27 books.\ntestament &lt;- c(rep(\"Old\", 39), rep(\"New\", 27))"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06a.html#creating-data-frame-with-text-and-metadata",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06a.html#creating-data-frame-with-text-and-metadata",
+    "title": "In-class Exercise 6",
+    "section": "Creating data frame with text and metadata",
+    "text": "Creating data frame with text and metadata\n\n# Data frame with one book as one row.\nbible_df &lt;- tibble::tibble(Text = chapters,\n                           Book = book_titles,\n                           Testament = testament)\n\n\n# We want each chapter to be one row, but keep the metadata (book and which testament).\nbible_df &lt;- tidyr::unnest(bible_df, Text)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex06/In-class_Ex06a.html#corporaexplorer",
+    "href": "In-class_Ex/In-class_Ex06/In-class_Ex06a.html#corporaexplorer",
+    "title": "In-class Exercise 6",
+    "section": "corporaexplorer",
+    "text": "corporaexplorer\nWhen we first have a data frame with text and metadata, creating a “corporaexplorerobject” for exploration is very simple:\n\nAs this is a corpus which is not organised by date, we set date_based_corpus to FALSE.\nBecause we want to organise our exploration around the books in the Bible, we pass \"Book\" to the grouping_variable argument.\nWe specify which metadata columns we want to be displayed in the “Document information” tab, using the columns_doc_info argument.\n\n\nKJB &lt;- prepare_data(dataset = bible_df,\n                    date_based_corpus = FALSE,\n                    grouping_variable = \"Book\",\n                    columns_doc_info = c(\"Testament\", \"Book\"))\n\nRun corpus explorer:\n\nexplore(KJB)\n\nShiny applications not supported in static R Markdown documents"
   }
 ]

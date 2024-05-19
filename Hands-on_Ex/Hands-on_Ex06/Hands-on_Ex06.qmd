@@ -1,0 +1,162 @@
+---
+title: "Hands-on Exercise 6: Modelling, Visualising and Analysing Network Data with R"
+author: Kwok Pei Shan
+date: "May 15, 2024"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## **Overview**
+
+In this hands-on exercise, we will learn how to model, analyse and visualise network data using R:
+
+-   create graph object data frames, manipulate them using appropriate functions of *dplyr*, *lubridate*, and *tidygraph*,
+
+-   build network graph visualisation using appropriate functions of *ggraph*,
+
+-   compute network geometrics using *tidygraph*,
+
+-   build advanced graph visualisation by incorporating the network geometrics, and
+
+-   build interactive network visualisation using *visNetwork* package.
+
+## **Getting Started**
+
+### **Installing and launching R packages**
+
+In this hands-on exercise, four network data modelling and visualisation packages will be installed and launched. They are igraph, tidygraph, ggraph and visNetwork. Beside these four packages, tidyverse and [lubridate](https://lubridate.tidyverse.org/), an R package specially designed to handle and wrangling time data will be installed and launched too.
+
+```{r}
+pacman::p_load(igraph, tidygraph, ggraph, 
+               visNetwork, lubridate, clock,
+               tidyverse, graphlayouts)
+```
+
+## **The Data**
+
+The data sets used in this hands-on exercise is from an oil exploration and extraction company. There are two data sets. One contains the nodes data and the other contains the edges data.
+
+### **The edges data**
+
+-   *GAStech-email_edges.csv* which consists of two weeks of 9063 emails correspondences between 55 employees.
+
+### **The nodes data**
+
+-   *GAStech_email_nodes.csv* which consist of the names, department and title of the 55 employees.
+
+### **Importing network data from files**
+
+In this step, you will import GAStech_email_node.csv and GAStech_email_edges-v2.csv into RStudio environment by using `read_csv()` of **readr** package.
+
+```{r}
+GAStech_nodes <- read_csv("data/GAStech_email_node.csv")
+GAStech_edges <- read_csv("data/GAStech_email_edge-v2.csv")
+```
+
+### **Reviewing the imported data**
+
+Next, we will examine the structure of the data frame using *glimpse()* of **dplyr**.
+
+```{r}
+glimpse(GAStech_edges)
+```
+
+The output report of GAStech_edges above reveals that the *SentDate* is treated as “Character” data type instead of *date* data type. This is an error! Before we continue, it is important for us to change the data type of *SentDate* field back to “Date”” data type.
+
+### **Wrangling time**
+
+The code chunk below will be used to perform the changes.
+
+```{r}
+GAStech_edges <- GAStech_edges %>%
+  mutate(SendDate = dmy(SentDate)) %>%
+  mutate(Weekday = wday(SentDate,
+                        label = TRUE,
+                        abbr = FALSE))
+```
+
+-   both *dmy()* and *wday()* are functions of **lubridate** package. [lubridate](https://r4va.netlify.app/cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html) is an R package that makes it easier to work with dates and times.
+
+-   *dmy()* transforms the SentDate to Date data type.
+
+-   *wday()* returns the day of the week as a decimal number or an ordered factor if label is TRUE. The argument abbr = FALSE keeps the day spelling in full, i.e. Monday. The function will create a new column in the data.frame i.e. Weekday and the output of *wday()* will save in this newly created field.
+
+-   the values in the *Weekday* field are in ordinal scale.
+
+### **Reviewing the revised date fields**
+
+Table below shows the data structure of the reformatted *GAStech_edges* data frame:
+
+```{r}
+glimpse(GAStech_edges)
+```
+
+### **Wrangling attributes**
+
+A close examination of *GAStech_edges* data.frame reveals that it consists of individual e-mail flow records. This is not very useful for visualisation.
+
+In view of this, we will aggregate the individual by date, senders, receivers, main subject and day of the week.
+
+```{r}
+GAStech_edges_aggregated <- GAStech_edges %>%
+  filter(MainSubject == "Work related") %>%
+  group_by(source, target, Weekday) %>%
+    summarise(Weight = n()) %>%
+  filter(source!=target) %>%
+  filter(Weight > 1) %>%
+  ungroup()
+```
+
+-   four functions from **dplyr** package are used. They are: *filter()*, *group()*, *summarise()*, and *ungroup()*.
+
+-   The output data.frame is called **GAStech_edges_aggregated**.
+
+-   A new field called *Weight* has been added in GAStech_edges_aggregated.
+
+### **Reviewing the revised edges file**
+
+Table below shows the data structure of the reformatted *GAStech_edges_aggregated* data frame
+
+```{r}
+glimpse(GAStech_edges_aggregated)
+```
+
+## **Creating network objects using tidygraph**
+
+In this section, we will learn how to create a graph data model by using **tidygraph** package. It provides a tidy API for graph/network manipulation. While network data itself is not tidy, it can be envisioned as two tidy tables, one for node data and one for edge data. tidygraph provides a way to switch between the two tables and provides dplyr verbs for manipulating them. Furthermore it provides access to a lot of graph algorithms with return values that facilitate their use in a tidy workflow.
+
+-   [Introducing tidygraph](https://www.data-imaginist.com/2017/introducing-tidygraph/)
+
+-   [tidygraph 1.1 - A tidy hope](https://www.data-imaginist.com/2018/tidygraph-1-1-a-tidy-hope/)
+
+### **The tbl_graph object**
+
+Two functions of **tidygraph** package can be used to create network objects, they are:
+
+-   [`tbl_graph()`](https://tidygraph.data-imaginist.com/reference/tbl_graph.html) creates a **tbl_graph** network object from nodes and edges data.
+
+-   [`as_tbl_graph()`](https://tidygraph.data-imaginist.com/reference/tbl_graph.html) converts network data and objects to a **tbl_graph** network. Below are network data and objects supported by `as_tbl_graph()`
+
+    -   a node data.frame and an edge data.frame,
+
+    -   data.frame, list, matrix from base,
+
+    -   igraph from igraph,
+
+    -   network from network,
+
+    -   dendrogram and hclust from stats,
+
+    -   Node from data.tree,
+
+    -   phylo and evonet from ape, and
+
+    -   graphNEL, graphAM, graphBAM from graph (in Bioconductor).
+
+### **The dplyr verbs in tidygraph**
+
+-   *activate()* verb from **tidygraph** serves as a switch between tibbles for nodes and edges. All dplyr verbs applied to **tbl_graph** object are applied to the active tibble.

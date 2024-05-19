@@ -1,0 +1,14 @@
+{
+  "hash": "3842994e2ca137158f2c36eab90ce255",
+  "result": {
+    "markdown": "---\ntitle: \"In-class Exercise 5b\"\nauthor: Kwok Pei Shan\ndate: \"May 11, 2024\"\ndate-modified: \"last-modified\"\nexecute: \n  eval: true\n  echo: true\n  warning: false\n  freeze: true\n---\n\n\n## Load packages\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(jsonlite, tidyverse)\n```\n:::\n\n\n## Load data\n\nIn the code chunk below, `fromJSON()` of **jsonlite** package is used to import the JSON files into R environment:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nmc1_data <- fromJSON(\"data/mc1.json\")\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nmc2_data <- fromJSON(\"data/mc2.json\")\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nmc3_data <- fromJSON(\"data/mc3-v1.json\")\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,55 @@
+---
+title: "In-class Exercise 5a"
+author: Kwok Pei Shan
+date: "May 11, 2024"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Installing R packages
+
+```{r}
+pacman::p_load(tidyverse, readtext,
+               quanteda, tidytext)
+```
+
+```{r}
+text_data <- readtext(paste0("data/articles", "/*"))
+
+#alternative code: text_data <- readtext("data/articles/*")
+```
+
+```{r}
+corpus_text <- corpus(text_data)
+summary(corpus_text, 5)
+```
+
+Tokenisation and removing stop words:
+
+```{r}
+usenet_words <- text_data %>%
+  unnest_tokens(word, text) %>%
+  filter(str_detect(word, "[a-z']$"),
+  !word %in% stop_words$word)
+```
+
+Word count, show in descending order (word with highest count at the top).
+
+```{r}
+usenet_words %>%
+  count(word, sort = TRUE)
+```
+
+```{r}
+text_data_splitted <- text_data %>%
+  separate_wider_delim("doc_id",
+                       delim = "__0__",
+                       names = c("X", "Y"),
+                       too_few = "align_end")
+
+#separate_wider_delim from tidyr package.
+```

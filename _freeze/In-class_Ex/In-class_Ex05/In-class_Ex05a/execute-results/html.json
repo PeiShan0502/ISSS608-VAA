@@ -1,0 +1,14 @@
+{
+  "hash": "dc16e36232de4d3df42c658b418e3680",
+  "result": {
+    "markdown": "---\ntitle: \"In-class Exercise 5a\"\nauthor: Kwok Pei Shan\ndate: \"May 11, 2024\"\ndate-modified: \"last-modified\"\nexecute: \n  eval: true\n  echo: true\n  warning: false\n  freeze: true\n---\n\n\n## Installing R packages\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(tidyverse, readtext,\n               quanteda, tidytext)\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\ntext_data <- readtext(paste0(\"data/articles\", \"/*\"))\n\n#alternative code: text_data <- readtext(\"data/articles/*\")\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\ncorpus_text <- corpus(text_data)\nsummary(corpus_text, 5)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\nCorpus consisting of 338 documents, showing 5 documents:\n\n                                   Text Types Tokens Sentences\n Alvarez PLC__0__0__Haacklee Herald.txt   206    433        18\n    Alvarez PLC__0__0__Lomark Daily.txt   102    170        12\n   Alvarez PLC__0__0__The News Buoy.txt    90    200         9\n Alvarez PLC__0__1__Haacklee Herald.txt    96    187         8\n    Alvarez PLC__0__1__Lomark Daily.txt   241    504        21\n```\n:::\n:::\n\n\nTokenisation and removing stop words:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nusenet_words <- text_data %>%\n  unnest_tokens(word, text) %>%\n  filter(str_detect(word, \"[a-z']$\"),\n  !word %in% stop_words$word)\n```\n:::\n\n\nWord count, show in descending order (word with highest count at the top).\n\n\n::: {.cell}\n\n```{.r .cell-code}\nusenet_words %>%\n  count(word, sort = TRUE)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\nreadtext object consisting of 3260 documents and 0 docvars.\n# A data frame: 3,260 × 3\n  word             n text     \n  <chr>        <int> <chr>    \n1 fishing       2177 \"\\\"\\\"...\"\n2 sustainable   1525 \"\\\"\\\"...\"\n3 company       1036 \"\\\"\\\"...\"\n4 practices      838 \"\\\"\\\"...\"\n5 industry       715 \"\\\"\\\"...\"\n6 transactions   696 \"\\\"\\\"...\"\n# ℹ 3,254 more rows\n```\n:::\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\ntext_data_splitted <- text_data %>%\n  separate_wider_delim(\"doc_id\",\n                       delim = \"__0__\",\n                       names = c(\"X\", \"Y\"),\n                       too_few = \"align_end\")\n\n#separate_wider_delim from tidyr package.\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

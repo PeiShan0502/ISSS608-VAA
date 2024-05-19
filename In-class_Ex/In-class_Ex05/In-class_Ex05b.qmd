@@ -1,0 +1,33 @@
+---
+title: "In-class Exercise 5b"
+author: Kwok Pei Shan
+date: "May 11, 2024"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Load packages
+
+```{r}
+pacman::p_load(jsonlite, tidyverse)
+```
+
+## Load data
+
+In the code chunk below, `fromJSON()` of **jsonlite** package is used to import the JSON files into R environment:
+
+```{r}
+mc1_data <- fromJSON("data/mc1.json")
+```
+
+```{r}
+mc2_data <- fromJSON("data/mc2.json")
+```
+
+```{r}
+mc3_data <- fromJSON("data/mc3-v1.json")
+```
