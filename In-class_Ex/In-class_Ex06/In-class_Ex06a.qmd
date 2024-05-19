@@ -1,5 +1,5 @@
 ---
-title: "In-class Exercise 6"
+title: "In-class Exercise 6a"
 author: Kwok Pei Shan
 date: "May 18, 2024"
 date-modified: "last-modified"
@@ -125,7 +125,7 @@ KJB <- prepare_data(dataset = bible_df,
 ```
 
 Run corpus explorer:
+
 ```{r}
 explore(KJB)
 ```
-
