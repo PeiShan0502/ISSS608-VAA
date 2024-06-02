@@ -202,11 +202,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercise">    
         <li>
     <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html" rel="" target="">
- <span class="dropdown-text">Take-home Exercise 1 Part 1</span></a>
+ <span class="dropdown-text">Take-home Exercise 1</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html" rel="" target="">
- <span class="dropdown-text">Take-home Exercise 1 Part 2</span></a>
+ <span class="dropdown-text">Take-home Exercise 2</span></a>
   </li>  
     </ul>
   </li>
@@ -273,7 +273,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 18, 2024</p>
+      <p class="date-modified">May 22, 2024</p>
     </div>
   </div>
     
@@ -321,11 +321,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(source <span class="sc">!=</span> target) <span class="sc">%&gt;%</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>:::callout_note() Things to note: - <code>distinct()</code>: to ensure that there are no duplicate records. A record is treated as duplicate if the source and target are the same with another record.</p>
+<div class="callout callout-style-default callout-note callout-titled" data-text="Things to note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
+<li><p><code>distinct()</code>: to ensure that there are no duplicate records. A record is treated as duplicate if the source and target are the same with another record.</p></li>
 <li><p><code>as.character(source)</code>, <code>as.character(target)</code>: to avoid potential problems later on, explicitly encode both data types to string/ character data type.</p></li>
 <li><p><code>group_by</code> and <code>summarise</code>: to count no. of records between each source and target.</p></li>
 </ul>
+</div>
+</div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mc3_nodes <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(mc3_data<span class="sc">$</span>nodes) <span class="sc">%&gt;%</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">country =</span> <span class="fu">as.character</span>(country),</span>

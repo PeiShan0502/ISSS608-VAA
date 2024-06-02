@@ -51,12 +51,14 @@ mc3_edges <-
   filter(source != target) %>%
   ungroup()
 ```
-:::callout_note() Things to note:
+
+::: {.callout-note text="Things to note"}
 -   `distinct()`: to ensure that there are no duplicate records. A record is treated as duplicate if the source and target are the same with another record.
 
 -   `as.character(source)`, `as.character(target)`: to avoid potential problems later on, explicitly encode both data types to string/ character data type.
 
 -   `group_by` and `summarise`: to count no. of records between each source and target.
+:::
 
 ```{r}
 mc3_nodes <- as_tibble(mc3_data$nodes) %>%
@@ -67,7 +69,8 @@ mc3_nodes <- as_tibble(mc3_data$nodes) %>%
          type = as.character(type)) %>%
   select(id, country, type, revenue_omu, product_services)
 ```
-When we cleaned the nodes data, we removed some of the nodes?? so we have to do this now. left join, so excess ones from mc3_nodes will be left out
+
+When we cleaned the nodes data, we removed some of the nodes?? so we have to do this now. left join, umatched = "drop" so that excess ones from mc3_nodes will be left out.
 
 ```{r}
 id1 <- mc3_edges %>%
@@ -84,8 +87,8 @@ mc3_nodes1 <- rbind(id1, id2) %>%
             unmatched = "drop")
 ```
 
-
 finally construct graph:
+
 ```{r}
 mc3_graph <- tbl_graph(nodes = mc3_nodes1,
                        edges = mc3_edges,
@@ -96,8 +99,8 @@ mc3_graph <- tbl_graph(nodes = mc3_nodes1,
            centrality_closeness())
 ```
 
-
 Build graph visualisation:
+
 ```{r}
 mc3_graph %>%
   filter(betweenness_centrality >= 300000) %>%
@@ -110,4 +113,3 @@ ggraph(layout = "fr") +
   scale_size_continuous(range = c(1,10)) +
   theme_graph()
 ```
-
