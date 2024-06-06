@@ -1,0 +1,306 @@
+---
+title: "Take-home Exercise 3"
+author: Kwok Pei Shan
+date: "May 22, 2024"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+## Getting Started
+
+```{r}
+pacman::p_load(jsonlite, tidygraph, ggraph,
+               visNetwork, graphlayouts, ggforce,
+               skimr, tidytext, tidyverse)
+```
+
+## Importing Graph Data
+
+In the code chunk below, `fromJSON()` of **jsonlite** package is used to import *MC3.json* into R environment.
+
+```{r}
+mc3_data <- fromJSON("data/mc3_cleaned.json")
+```
+
+```{r}
+class(mc3_data)
+```
+
+mc3 data is a directed multigraph with nodes and links. As shown by the output of the code chunk above, they are stored as lists instead of vector columns.
+
+## **Wrangling and tidying edges**
+
+### **Extracting edges**
+
+The code chunk below will be used to extract the links data frame of mc3_data and save it as a tibble data frame called mc3_edges.
+
+```{r}
+mc3_edges <- as_tibble(mc3_data$links) %>%
+  distinct()
+```
+
+Next, `glimpse()` of dplyr will be used to reveal the structure of *mc3_edges* tibble data frame:
+
+```{r}
+glimpse(mc3_edges)
+```
+
+::: callout-note
+From the table above, the following data issues can be identified:
+
+-   `start_date`, `_last_edited_date`, `_date_added` ,and `end_date` should be in date data type. Currently they are in character data type.
+
+-   Some field names start with "\_", they need to be renamed in order to avoid unnecessary coding issue in the later tasks.
+:::
+
+### **Correcting date data type in `mc3_edges`**
+
+In the code chunk below, `as_datetime()` of **lubridate** package is used to convert fields with character date into **POSIXt** format.
+
+```{r}
+mc3_edges$start_date <- as_datetime(mc3_edges$start_date)
+mc3_edges$`_last_edited_date`<- as_datetime(mc3_edges$`_last_edited_date`)
+mc3_edges$`_date_added`<- as_datetime(mc3_edges$`_date_added`)
+mc3_edges$end_date <- as_datetime(mc3_edges$end_date)
+```
+
+Next, `glimpse()` will be used to confirm if the process have been performed correctly.
+
+```{r}
+glimpse(mc3_edges)
+```
+
+### **Changing field names in `mc3_edges`**
+
+In the code chunk below, `rename()` of **dplyr** package is used to change the following fields.
+
+```{r}
+mc3_edges <- mc3_edges %>%
+  rename("last_edited_by" = "_last_edited_by",
+         "last_edited_date" = "_last_edited_date",
+         "date_added" = "_date_added",
+         "raw_source" = "_raw_source",
+         "algorithm" = "_algorithm")
+```
+
+### **Splitting words in mc3_edges**
+
+From the screenshot below, we can see that the text in *type* field are not in a tidy manner:
+
+![](images/clipboard-3034344894.png)
+
+We are going to tidy up the type column by creating two columns as shown below:
+
+![](images/clipboard-4077002358.png)
+
+1.  First, we find the maximum number of elements in any split:
+
+```{r}
+word_list <- strsplit(mc3_edges$type, "\\.")
+max_elements <- max(lengths(word_list))
+```
+
+2.  Then, we pad shorter splits with NA values to make them all the same length:
+
+```{r}
+word_list_padded <- lapply(word_list, 
+function(x) c(x, rep(NA, max_elements - length(x))))
+```
+
+```{r}
+word_df <- do.call(rbind, word_list_padded)
+colnames(word_df) <- paste0("event", 1:max_elements)
+```
+
+3.  Since the output above is a matrix, we convert word_df into a tibble data.frame:
+
+```{r}
+word_df <- as_tibble(word_df) %>%
+  select(event2, event3)
+class(word_df)
+```
+
+4.  Finally, we append the extracted columns back to mc3_edges tibble data frame:
+
+```{r}
+mc3_edges <- mc3_edges %>%
+  cbind(word_df)
+```
+
+We save the mc3_edges into R rds file format for future use:
+
+```{r}
+write_rds(mc3_edges, "data/rds/mc3_edges.rds")
+```
+
+## **Wrangling and tidying nodes**
+
+### **Extracting nodes**
+
+The code chunk below will be used to extract the *nodes* data.frame of *mc3_data* and parses it as a tibble data.frame called *mc3_nodes*.
+
+```{r}
+mc3_nodes <- as_tibble(mc3_data$nodes) %>%
+  distinct()
+```
+
+Next, the code chunk below is used to reveal the data structure of *mc3_nodes* tibble data.frame.
+
+```{r}
+glimpse(mc3_nodes)
+```
+
+::: callout-note
+From the above output:
+
+-   `founding_date`, `_last_edited_date` , `_date_added` , `dob` should be in the date data type, currently it's character data type.
+
+-   Some field names start with "\_", they need to be renamed in order to avoid unnecessary coding issue in the later tasks.
+:::
+
+### **Correcting date data type in `mc3_nodes`**
+
+In the code chunk below, `as_datetime()` of **lubridate** package is used to convert fields with character date into **POSIXt** format.
+
+```{r}
+mc3_nodes$founding_date <- as_datetime(mc3_nodes$founding_date)
+mc3_nodes$`_last_edited_date`<- as_datetime(mc3_nodes$`_last_edited_date`)
+mc3_nodes$`_date_added`<- as_datetime(mc3_nodes$`_date_added`)
+mc3_nodes$dob <- as_datetime(mc3_nodes$dob)
+```
+
+Next, `glimpse()` will be used to confirm if the process have been performed correctly.
+
+```{r}
+glimpse(mc3_nodes)
+```
+
+### **Changing field names in `mc3_nodes`**
+
+In the code chunk below, `rename()` of **dplyr** package is used to change the following fields.
+
+```{r}
+mc3_nodes<- mc3_nodes %>%
+  rename("last_edited_by" = "_last_edited_by",
+         "last_edited_date" = "_last_edited_date",
+         "date_added" = "_date_added",
+         "raw_source" = "_raw_source",
+         "algorithm" = "_algorithm")
+```
+
+### **Splitting words in mc3_nodes**
+
+Similarly, we can see that the text in *type* column are not in a tidy manner:
+
+![](images/clipboard-3781947034.png)
+
+We are going to tidy up the *type* column by creating two columns as shown below:
+
+![](images/clipboard-103283567.png)
+
+1.  First, we find the maximum number of elements in any split:
+
+```{r}
+word_list <- strsplit(mc3_nodes$type, "\\.") 
+max_elements <- max(lengths(word_list))
+```
+
+2.  Then, we pad shorter splits with NA values to make them all the same length:
+
+```{r}
+word_list_padded <- lapply(word_list,  
+function(x) c(x, rep(NA, max_elements - length(x))))
+```
+
+```{r}
+word_df <- do.call(rbind, word_list_padded) 
+colnames(word_df) <- paste0("event", 1:max_elements)
+```
+
+3.  Since the output above is a matrix, we convert word_df into a tibble data.frame:
+
+```{r}
+word_df <- as_tibble(word_df) %>%   
+  select(event2, event3) 
+class(word_df)
+```
+
+4.  Finally, we append the extracted columns back to mc3_nodes tibble data frame:
+
+```{r}
+mc3_nodes <- mc3_nodes %>%   
+  cbind(word_df)
+```
+
+We save the mc3_nodes into R rds file format for future use:
+
+```{r}
+write_rds(mc3_nodes, "data/rds/mc3_nodes.rds")
+```
+
+## Saving files for future use
+
+```{r}
+mc3_edges <- read_rds("data/rds/mc3_edges.rds")
+mc3_nodes <- read_rds("data/rds/mc3_nodes.rds")
+```
+
+## Data Visualisations
+
+### **Task 2**
+
+We are going to attempt Task 2:
+
+|                                                                                                                                                                                                         |
+|------------------------------------------------------------------------|
+| Using your visualizations, find and display examples of typical and atypical business transactions (e.g., mergers, acquisitions, etc.). Can you infer the motivations behind changes in their activity? |
+
+For this task, as we are looking at business transactions such as mergers or acquisitions, etc., we are planning to look at the edges which represent Beneficial Ownership or Shareholdership, and also look into the *start_date* and *end_date* to examine which business transactions are typical and atypical. The idea is to visualize the type of event using the weight of the edges, e.g., Beneficial Ownership may have higher weightage than Shareholdership, and hence appear as a thicker line on the network graph. And use the *start_date* and *end_date* to see the changes in the network graph over time.
+
+The steps are as follows:
+
+1.  In mc3_edges tibble data frame, include weight factor such that Beneficial Ownership has higher weight than Shareholdership. In particular, Beneficial Ownership, Shareholdership, FamilyRelationship, and Works.For will have weightage of 4, 3, 2, and 1 respectively.
+2.  put both mc3_edges and mc3_nodes together to construct network graph
+3.  Build graph visualisation (filter the mc3_edges to show only Beneficial Ownership and Shareholdership, filter the mc3_nodes to show only organisations (i.e., event2 = "Organisation")).
+4.  Add interactivity (slider) to show changes in network graph over time, using *start_date* and *end_date*. Also add tooltip to be able to see entities which are connected to SouthSeafood Express Corp.
+
+-   Step 1: In mc3_edges tibble data frame, include weight factor such that Beneficial Ownership, Shareholdership, FamilyRelationship, and Works.For will have weightage of 4, 3, 2, and 1 respectively.
+
+```{r}
+mc3_edges$weight <- ifelse(mc3_edges$event3 == "BeneficialOwnership", 4,
+                           ifelse(mc3_edges$event3 == "Shareholdership", 3, 
+                                  ifelse(mc3_edges$event2 == "FamilyRelationship", 2, ifelse(mc3_edges$event2 == "WorksFor", 1, "what is this?"))))
+  
+```
+
+```{r}
+# Print unique values in event2 and event3 columns
+print(unique(mc3_edges$event2))
+print(unique(mc3_edges$event3))
+```
+
+```{r}
+print(sum(is.na(mc3_edges$event2)))
+print(sum(is.na(mc3_edges$event3)))
+```
+
+```{r}
+mc3_edges$weight <- ifelse(mc3_edges$event3 == "BeneficialOwnership", 4,
+                           ifelse(mc3_edges$event3 == "Shareholdership", 3, 0))
+```
+
+```{r}
+?ifelse
+```
+
+### **Task 3**
+
+Next, we are going to attempt Task 3:
+
+|                                                                                                                                                                           |
+|------------------------------------------------------------------------|
+| Develop a visual approach to examine inferences. Infer how the influence of a company changes through time. Can you infer ownership or influence that a network may have? |
