@@ -268,33 +268,82 @@ The steps are as follows:
 3.  Build graph visualisation (filter the mc3_edges to show only Beneficial Ownership and Shareholdership, filter the mc3_nodes to show only organisations (i.e., event2 = "Organisation")).
 4.  Add interactivity (slider) to show changes in network graph over time, using *start_date* and *end_date*. Also add tooltip to be able to see entities which are connected to SouthSeafood Express Corp.
 
--   Step 1: In mc3_edges tibble data frame, include weight factor such that Beneficial Ownership, Shareholdership, FamilyRelationship, and Works.For will have weightage of 4, 3, 2, and 1 respectively.
+[Step 1:]{.underline}
+
+-   In mc3_edges tibble data frame, include weight factor such that Beneficial Ownership, Shareholdership, FamilyRelationship, and Works.For will have weightage of 4, 3, 2, and 1 respectively.
 
 ```{r}
-mc3_edges$weight <- ifelse(mc3_edges$event3 == "BeneficialOwnership", 4,
-                           ifelse(mc3_edges$event3 == "Shareholdership", 3, 
-                                  ifelse(mc3_edges$event2 == "FamilyRelationship", 2, ifelse(mc3_edges$event2 == "WorksFor", 1, "what is this?"))))
-  
+mc3_edges$weight <- ifelse(mc3_edges$event2 == "FamilyRelationship", 2, 
+                           ifelse(mc3_edges$event2 == "WorksFor", 1,
+                                  ifelse(mc3_edges$event3 == "BeneficialOwnership", 4,
+                           ifelse(mc3_edges$event3 == "Shareholdership", 3, "Not Applicable"))))
+```
+
+Change data type of the weight factor, from character to integer:
+
+```{r}
+mc3_edges$weight <- as.numeric(mc3_edges$weight)
 ```
 
 ```{r}
-# Print unique values in event2 and event3 columns
-print(unique(mc3_edges$event2))
-print(unique(mc3_edges$event3))
+glimpse(mc3_edges)
+```
+
+Check for any missing values in integer columns:
+
+```{r}
+print(sum(is.na(mc3_edges$weight)))
+print(sum(is.na(mc3_edges$key)))
+```
+
+[Step 2:]{.underline}
+
+-   put both mc3_edges and mc3_nodes together to construct network graph
+
+```{r}
+id1 <- mc3_edges %>%
+  select(source) %>%
+  rename(id = source)
+
+id2 <- mc3_edges %>%
+  select(target) %>%
+  rename(id = target)
+
+mc3_nodes1 <- rbind(id1, id2) %>%
+  distinct() %>%
+  left_join(mc3_nodes, 
+            unmatched = "drop")
 ```
 
 ```{r}
-print(sum(is.na(mc3_edges$event2)))
-print(sum(is.na(mc3_edges$event3)))
+glimpse(mc3_edges)
 ```
 
 ```{r}
-mc3_edges$weight <- ifelse(mc3_edges$event3 == "BeneficialOwnership", 4,
-                           ifelse(mc3_edges$event3 == "Shareholdership", 3, 0))
+mc3_graph <- tbl_graph(nodes = mc3_nodes1,
+                       edges = mc3_edges,
+                       directed = FALSE) %>%
+  mutate(betweenness_centrality = 
+           centrality_betweenness(),
+         closeness_centrality = 
+           centrality_closeness())
 ```
 
+[Step 3:]{.underline}
+
+-   Build graph visualisation (filter the mc3_edges to show only Beneficial Ownership and Shareholdership, filter the mc3_nodes to show only organisations (i.e., event2 = "Organisation")).
+
 ```{r}
-?ifelse
+mc3_graph %>%
+  filter(betweenness_centrality >= 300000) %>%
+ggraph(layout = "fr") +
+  geom_edge_link(aes(alpha = 0.5)) +
+  geom_node_point(aes(
+    size = betweenness_centrality,
+    colors = "lightblue",
+    alpha = 0.5)) +
+  scale_size_continuous(range = c(1,10)) +
+  theme_graph()
 ```
 
 ### **Task 3**
@@ -304,3 +353,7 @@ Next, we are going to attempt Task 3:
 |                                                                                                                                                                           |
 |------------------------------------------------------------------------|
 | Develop a visual approach to examine inferences. Infer how the influence of a company changes through time. Can you infer ownership or influence that a network may have? |
+
+For this task, we are planning to use centrality measures such as betweenness centrality and closeness centrality to measure the influence of a company. The higher the betweenness centrality of a company, the more important the company is in acting as a “bridge” to manage relationships and business transactions between other companies, which suggests that this company has high influence over others as it is highly crucial in facilitating flow of information and/or resources between other companies. Similarly, a company with high closeness centrality suggests that this company has high influence as they are close to many other companies and thus, able to efficiently communicate and spread information quickly.
+
+At the moment, the idea is to have a visualization that looks like [this](https://r4va.netlify.app/chap27#modifying-network-nodes), where the bigger the size of a node, the higher the betweenness/ closeness centrality of the company (i.e., the more influence a company has), with perhaps a slider to measure any changes in the influential companies over time.
