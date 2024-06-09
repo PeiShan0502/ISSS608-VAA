@@ -1,0 +1,12 @@
+name: prototype02
+title: prototype02
+username: pskwok
+account: pskwok
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 12148227
+bundleId: 8716769
+url: https://pskwok.shinyapps.io/prototype02/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

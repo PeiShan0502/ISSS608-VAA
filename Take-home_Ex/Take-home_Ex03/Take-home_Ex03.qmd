@@ -12,6 +12,8 @@ execute:
 
 ## Getting Started
 
+The code chunk below loads the necessary R packages for this take-home exercise:
+
 ```{r}
 pacman::p_load(jsonlite, tidygraph, ggraph,
                visNetwork, graphlayouts, ggforce,
@@ -36,12 +38,26 @@ mc3 data is a directed multigraph with nodes and links. As shown by the output o
 
 ### **Extracting edges**
 
-The code chunk below will be used to extract the links data frame of mc3_data and save it as a tibble data frame called mc3_edges.
+The code chunk below will be used to extract the links data frame of mc3_data and save it as a tibble data frame called mc3_edges:
 
 ```{r}
 mc3_edges <- as_tibble(mc3_data$links) %>%
-  distinct()
+  distinct() %>%
+  mutate(source = as.character(source),
+         target = as.character(target),
+         type = as.character(type)) %>%
+  group_by(source, target, type) %>%
+  filter(source != target) %>%
+  ungroup()
 ```
+
+::: callout-note
+-   `distinct()` is used to ensure that there will be no duplicated records.
+
+-   `mutate()` and `as.character()` are used to convert the field data type from list to character.
+
+-   the `filter(source != target)` is to ensure that no record with similar source and target.
+:::
 
 Next, `glimpse()` of dplyr will be used to reveal the structure of *mc3_edges* tibble data frame:
 
@@ -54,7 +70,7 @@ From the table above, the following data issues can be identified:
 
 -   `start_date`, `_last_edited_date`, `_date_added` ,and `end_date` should be in date data type. Currently they are in character data type.
 
--   Some field names start with "\_", they need to be renamed in order to avoid unnecessary coding issue in the later tasks.
+-   Some field names start with "`_`", they need to be renamed in order to avoid unnecessary coding issue in the later tasks.
 :::
 
 ### **Correcting date data type in `mc3_edges`**
@@ -66,12 +82,6 @@ mc3_edges$start_date <- as_datetime(mc3_edges$start_date)
 mc3_edges$`_last_edited_date`<- as_datetime(mc3_edges$`_last_edited_date`)
 mc3_edges$`_date_added`<- as_datetime(mc3_edges$`_date_added`)
 mc3_edges$end_date <- as_datetime(mc3_edges$end_date)
-```
-
-Next, `glimpse()` will be used to confirm if the process have been performed correctly.
-
-```{r}
-glimpse(mc3_edges)
 ```
 
 ### **Changing field names in `mc3_edges`**
@@ -87,54 +97,17 @@ mc3_edges <- mc3_edges %>%
          "algorithm" = "_algorithm")
 ```
 
-### **Splitting words in mc3_edges**
-
-From the screenshot below, we can see that the text in *type* field are not in a tidy manner:
-
-![](images/clipboard-3034344894.png)
-
-We are going to tidy up the type column by creating two columns as shown below:
-
-![](images/clipboard-4077002358.png)
-
-1.  First, we find the maximum number of elements in any split:
+We further examine the edges, particularly the *type* field, and we can see that most of the edges are either Shareholdership or BeneficialOwnership. FamilyRelationship has the least of all.
 
 ```{r}
-word_list <- strsplit(mc3_edges$type, "\\.")
-max_elements <- max(lengths(word_list))
+ggplot(data = mc3_edges, aes(x = type)) +
+  geom_bar()
 ```
 
-2.  Then, we pad shorter splits with NA values to make them all the same length:
+We remove some columns in mc3_edges that won't be needed for this analysis:
 
 ```{r}
-word_list_padded <- lapply(word_list, 
-function(x) c(x, rep(NA, max_elements - length(x))))
-```
-
-```{r}
-word_df <- do.call(rbind, word_list_padded)
-colnames(word_df) <- paste0("event", 1:max_elements)
-```
-
-3.  Since the output above is a matrix, we convert word_df into a tibble data.frame:
-
-```{r}
-word_df <- as_tibble(word_df) %>%
-  select(event2, event3)
-class(word_df)
-```
-
-4.  Finally, we append the extracted columns back to mc3_edges tibble data frame:
-
-```{r}
-mc3_edges <- mc3_edges %>%
-  cbind(word_df)
-```
-
-We save the mc3_edges into R rds file format for future use:
-
-```{r}
-write_rds(mc3_edges, "data/rds/mc3_edges.rds")
+mc3_edges1 <- subset(mc3_edges, select = -c(last_edited_by, last_edited_date, date_added, raw_source, algorithm, key))
 ```
 
 ## **Wrangling and tidying nodes**
@@ -145,7 +118,11 @@ The code chunk below will be used to extract the *nodes* data.frame of *mc3_data
 
 ```{r}
 mc3_nodes <- as_tibble(mc3_data$nodes) %>%
-  distinct()
+  distinct() %>%
+  mutate(country = as.character(country),
+         id = as.character(id), 
+         ProductServices = as.character(ProductServices),
+         type = as.character(type))
 ```
 
 Next, the code chunk below is used to reveal the data structure of *mc3_nodes* tibble data.frame.
@@ -159,7 +136,7 @@ From the above output:
 
 -   `founding_date`, `_last_edited_date` , `_date_added` , `dob` should be in the date data type, currently it's character data type.
 
--   Some field names start with "\_", they need to be renamed in order to avoid unnecessary coding issue in the later tasks.
+-   Some field names start with "`_`", they need to be renamed in order to avoid unnecessary coding issue in the later tasks.
 :::
 
 ### **Correcting date data type in `mc3_nodes`**
@@ -171,12 +148,6 @@ mc3_nodes$founding_date <- as_datetime(mc3_nodes$founding_date)
 mc3_nodes$`_last_edited_date`<- as_datetime(mc3_nodes$`_last_edited_date`)
 mc3_nodes$`_date_added`<- as_datetime(mc3_nodes$`_date_added`)
 mc3_nodes$dob <- as_datetime(mc3_nodes$dob)
-```
-
-Next, `glimpse()` will be used to confirm if the process have been performed correctly.
-
-```{r}
-glimpse(mc3_nodes)
 ```
 
 ### **Changing field names in `mc3_nodes`**
@@ -192,66 +163,101 @@ mc3_nodes<- mc3_nodes %>%
          "algorithm" = "_algorithm")
 ```
 
-### **Splitting words in mc3_nodes**
-
-Similarly, we can see that the text in *type* column are not in a tidy manner:
-
-![](images/clipboard-3781947034.png)
-
-We are going to tidy up the *type* column by creating two columns as shown below:
-
-![](images/clipboard-103283567.png)
-
-1.  First, we find the maximum number of elements in any split:
+Furthermore, in case there are some nodes featured in the edges but not in the nodes from the mc3 list object. For consistency, we will combine both sets of nodes to give the complete nodes df.
 
 ```{r}
-word_list <- strsplit(mc3_nodes$type, "\\.") 
-max_elements <- max(lengths(word_list))
-```
+# extract all nodes from edges
+id1 <- mc3_edges %>%
+  select(source) %>%
+  rename(id = source)
 
-2.  Then, we pad shorter splits with NA values to make them all the same length:
+id2 <- mc3_edges %>%
+  select(target) %>%
+  rename(id = target)
 
-```{r}
-word_list_padded <- lapply(word_list,  
-function(x) c(x, rep(NA, max_elements - length(x))))
+additional_nodes <- rbind(id1, id2) %>%
+  distinct() %>%
+  filter(!id %in% mc3_nodes[["id"]])
 ```
 
 ```{r}
-word_df <- do.call(rbind, word_list_padded) 
-colnames(word_df) <- paste0("event", 1:max_elements)
+#combine all nodes
+mc3_nodes1 <- rbind(mc3_nodes, additional_nodes) %>%
+  distinct()
 ```
 
-3.  Since the output above is a matrix, we convert word_df into a tibble data.frame:
+We further examine the nodes below, particularly the *type* field, and we can see that most of the nodes are persons (51,649 nodes):
 
 ```{r}
-word_df <- as_tibble(word_df) %>%   
-  select(event2, event3) 
-class(word_df)
+ggplot(data = mc3_nodes1, aes(x = type)) +
+  geom_bar()
 ```
 
-4.  Finally, we append the extracted columns back to mc3_nodes tibble data frame:
+## **Check for duplicate nodes**
+
+The output of the code chunk below confirms that there are no duplicated nodes with the same id:
 
 ```{r}
-mc3_nodes <- mc3_nodes %>%   
-  cbind(word_df)
+mc3_nodes1[duplicated(mc3_nodes1$id), ] %>%
+  arrange(id)
 ```
 
-We save the mc3_nodes into R rds file format for future use:
+## **Cleaning up ProductServices in nodes**
+
+We note that only nodes of type Organisation have meaningful description for ProductServices, and for nodes of type Person, the ProductServices field has missing values. The same can be said for the following fields: PointOfContact, HeadOfOrg, founding_date, revenue, TradeDescription.
 
 ```{r}
-write_rds(mc3_nodes, "data/rds/mc3_nodes.rds")
+print(sum(is.na(mc3_nodes1$ProductServices)))
+print(sum(is.na(mc3_nodes1$PointOfContact)))
+print(sum(is.na(mc3_nodes1$HeadOfOrg)))
+print(sum(is.na(mc3_nodes1$founding_date)))
+print(sum(is.na(mc3_nodes1$revenue)))
+print(sum(is.na(mc3_nodes1$TradeDescription)))
+
 ```
 
-## Saving files for future use
+The above output also shows that PointOfContact and revenue seems to also be missing for some organisations.
+
+For this reason, we will only use the ProductServices column for nodes that are organisations:
 
 ```{r}
-mc3_edges <- read_rds("data/rds/mc3_edges.rds")
-mc3_nodes <- read_rds("data/rds/mc3_nodes.rds")
+# extract type that contains "Entity.Organization"
+org_nodes <- mc3_nodes1 %>%
+  filter(str_detect(type, "Entity.Organization"))
+
+# extract type that contains "Entity.Person"
+person_nodes <- mc3_nodes1 %>%
+  filter(str_detect(type, "Entity.Person"))
+
+# Person_nodes that have meaningful ProductServices
+person_nodes_w_pdt_services <- person_nodes %>%
+  filter(ProductServices != 'character(0)' & !is.na(ProductServices))
+
+print(paste0("Person nodes with ProductServices not null: ", length(person_nodes_w_pdt_services$id)))
+```
+
+## **Simplifying ProductServices in nodes**
+
+As our priority are the fishing-related companies, we will focus on nodes where the type is "Entity.Organization.FishingCompany" (600 nodes).
+
+```{r}
+# simplify ProductServices
+org_nodes_fishing <- org_nodes %>%
+  filter(type == "Entity.Organization.FishingCompany")
+```
+
+Since fishing company will not have date of birth (dob), we also remove the dob field from org_nodes_fishing:
+
+```{r}
+org_nodes_fishing <- subset(org_nodes_fishing, select = -dob)
+
+#Check for missing values:
+print(sum(is.na(org_nodes_fishing)))
 ```
 
 ## Data Visualisations
 
-### **Task 2**
+### **Task 2 - Atypical Business Transactions**
 
 We are going to attempt Task 2:
 
@@ -263,9 +269,9 @@ For this task, as we are looking at business transactions such as mergers or acq
 
 The steps are as follows:
 
-1.  In mc3_edges tibble data frame, include weight factor such that Beneficial Ownership has higher weight than Shareholdership. In particular, Beneficial Ownership, Shareholdership, FamilyRelationship, and Works.For will have weightage of 4, 3, 2, and 1 respectively.
-2.  put both mc3_edges and mc3_nodes together to construct network graph
-3.  Build graph visualisation (filter the mc3_edges to show only Beneficial Ownership and Shareholdership, filter the mc3_nodes to show only organisations (i.e., event2 = "Organisation")).
+1.  In mc3_edges tibble data frame, include weight factor such that Beneficial Ownership has higher weight than Shareholdership. In particular, Beneficial Ownership, Shareholdership, FamilyRelationship, and Works.For will have weightage of 4, 3, 2, and 1 respectively (assuming this is the level of importance of the types of edges)
+2.  put both edges and nodes together to construct network graph
+3.  Build graph visualisation
 4.  Add interactivity (slider) to show changes in network graph over time, using *start_date* and *end_date*. Also add tooltip to be able to see entities which are connected to SouthSeafood Express Corp.
 
 [Step 1:]{.underline}
@@ -273,55 +279,46 @@ The steps are as follows:
 -   In mc3_edges tibble data frame, include weight factor such that Beneficial Ownership, Shareholdership, FamilyRelationship, and Works.For will have weightage of 4, 3, 2, and 1 respectively.
 
 ```{r}
-mc3_edges$weight <- ifelse(mc3_edges$event2 == "FamilyRelationship", 2, 
-                           ifelse(mc3_edges$event2 == "WorksFor", 1,
-                                  ifelse(mc3_edges$event3 == "BeneficialOwnership", 4,
-                           ifelse(mc3_edges$event3 == "Shareholdership", 3, "Not Applicable"))))
+mc3_edges$weight <- ifelse(mc3_edges$type == "Relationship.FamilyRelationship", 2, ifelse(mc3_edges$type == "Event.WorksFor", 1, 
+                                                                                          ifelse(mc3_edges$type == "Event.Owns.BeneficialOwnership", 4,
+                                                                                                 ifelse(mc3_edges$type == "Event.Owns.Shareholdership", 3, "Not Applicable"))))
 ```
 
-Change data type of the weight factor, from character to integer:
+Since there won't be any edges that fall under "Not Applicable" weight, we can change data type of the weight factor from character to integer:
 
 ```{r}
 mc3_edges$weight <- as.numeric(mc3_edges$weight)
 ```
 
-```{r}
-glimpse(mc3_edges)
-```
-
-Check for any missing values in integer columns:
-
-```{r}
-print(sum(is.na(mc3_edges$weight)))
-print(sum(is.na(mc3_edges$key)))
-```
-
 [Step 2:]{.underline}
 
--   put both mc3_edges and mc3_nodes together to construct network graph
+Before we put both edges and nodes together to construct network graph, we first need to remove missing values in `mc3_edges1`:
 
 ```{r}
-id1 <- mc3_edges %>%
-  select(source) %>%
-  rename(id = source)
-
-id2 <- mc3_edges %>%
-  select(target) %>%
-  rename(id = target)
-
-mc3_nodes1 <- rbind(id1, id2) %>%
-  distinct() %>%
-  left_join(mc3_nodes, 
-            unmatched = "drop")
+print(sum(is.na(mc3_edges1)))
 ```
 
-```{r}
-glimpse(mc3_edges)
-```
+Upon closer observation, it seems that the missing values come from the *end_date* column. The end_date column contains NA values for Relationship.FamilyRelationship edges, and when the event has not yet ended for Event.Owns.BeneficialOwnership, Event.Owns.Shareholdership, and Event.WorksFor edges.
+
+To analyse atypical business transactions, we want to look more closely into transactions where end_date of a transaction may be the same as the start_date of another transaction. Such a transaction looks fishy and may suggest that something illegal is going on. An example is shown below, where AguaLeska Transit N.V. relinquished shareholdership of SouthSeafood Express Corp on the same day that Tainamarine Fishing Co. assumed shareholdership of SouthSeafood Express Corp:
+
+![](images/clipboard-1704811638.png)
+
+For the above purpose, we can remove rows where the end_date is NA:
 
 ```{r}
-mc3_graph <- tbl_graph(nodes = mc3_nodes1,
-                       edges = mc3_edges,
+mc3_edges2 <- mc3_edges1[!is.na(mc3_edges1$end_date), ]
+
+#Check for missing values:
+print(sum(is.na(mc3_edges2)))
+```
+
+We construct the network graph with the code chunk below:
+
+```{r}
+#| eval: false
+mc3_graph <- tbl_graph(nodes = org_nodes_fishing,
+                       edges = mc3_edges2,
                        directed = FALSE) %>%
   mutate(betweenness_centrality = 
            centrality_betweenness(),
@@ -331,9 +328,10 @@ mc3_graph <- tbl_graph(nodes = mc3_nodes1,
 
 [Step 3:]{.underline}
 
--   Build graph visualisation (filter the mc3_edges to show only Beneficial Ownership and Shareholdership, filter the mc3_nodes to show only organisations (i.e., event2 = "Organisation")).
+-   Build graph visualisation
 
 ```{r}
+#| eval: false
 mc3_graph %>%
   filter(betweenness_centrality >= 300000) %>%
 ggraph(layout = "fr") +
