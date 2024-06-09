@@ -262,7 +262,7 @@ print(sum(is.na(org_nodes_fishing)))
 We are going to attempt Task 2:
 
 |                                                                                                                                                                                                         |
-|------------------------------------------------------------------------|
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Using your visualizations, find and display examples of typical and atypical business transactions (e.g., mergers, acquisitions, etc.). Can you infer the motivations behind changes in their activity? |
 
 For this task, as we are looking at business transactions such as mergers or acquisitions, etc., we are planning to look at the edges which represent Beneficial Ownership or Shareholdership, and also look into the *start_date* and *end_date* to examine which business transactions are typical and atypical. The idea is to visualize the type of event using the weight of the edges, e.g., Beneficial Ownership may have higher weightage than Shareholdership, and hence appear as a thicker line on the network graph. And use the *start_date* and *end_date* to see the changes in the network graph over time.
@@ -349,7 +349,7 @@ ggraph(layout = "fr") +
 Next, we are going to attempt Task 3:
 
 |                                                                                                                                                                           |
-|------------------------------------------------------------------------|
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Develop a visual approach to examine inferences. Infer how the influence of a company changes through time. Can you infer ownership or influence that a network may have? |
 
 For this task, we are planning to use centrality measures such as betweenness centrality and closeness centrality to measure the influence of a company. The higher the betweenness centrality of a company, the more important the company is in acting as a “bridge” to manage relationships and business transactions between other companies, which suggests that this company has high influence over others as it is highly crucial in facilitating flow of information and/or resources between other companies. Similarly, a company with high closeness centrality suggests that this company has high influence as they are close to many other companies and thus, able to efficiently communicate and spread information quickly.
